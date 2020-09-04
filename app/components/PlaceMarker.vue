@@ -29,7 +29,6 @@
 <script>
   import Info from './Info'
   import * as utils from "utils/utils";
-  import Map from './Map'
   export default {
     data() {
       return {

@@ -5,8 +5,17 @@
 ## Usage
 
 ``` bash
+# Build mapxbox plugin
+cd ./nativescript-mapbox/src
+npm i
+npm run build.release
+cd ../..
+
 # Install dependencies
 npm install
+
+# Build for device
+tns build <platform> --clean
 
 # Preview on device
 tns preview
