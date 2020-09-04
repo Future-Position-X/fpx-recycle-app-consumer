@@ -1,4 +1,6 @@
 import Vue from 'nativescript-vue'
+
+
 import App from './components/App'
 import Intro from './components/Intro'
 import VueDevtools from 'nativescript-vue-devtools'
@@ -13,6 +15,7 @@ Vue.config.silent = (TNS_ENV === 'production')
 Vue.registerElement('Carousel', () => require('nativescript-carousel').Carousel);
 Vue.registerElement('CarouselItem', () => require('nativescript-carousel').CarouselItem);
 Vue.registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
+Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView)
 
 new Vue({
   store,
