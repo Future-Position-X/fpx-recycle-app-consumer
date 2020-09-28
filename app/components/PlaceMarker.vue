@@ -15,6 +15,7 @@
               disableTilt="false"
               @mapReady="onMapReady($event)">
           </Mapbox>
+          <Image src="res://marker" stretch="none" horizontalAlignment="center" verticalAlignment="center" />
             <Button row="0" @onTap="onRetrievePositionTap" text="Hämta min position" horizontalAlignment="right" verticalAlignment="top"/>
             <StackLayout row="1" style="margin: 5px;">
               <Label textWrap="true" text="Placera markören där panten kan hämtas."/>
