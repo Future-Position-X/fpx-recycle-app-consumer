@@ -2,6 +2,7 @@
     <Page actionBarHidden="true">
         <GridLayout columns="*" rows="*, auto">
             <Mapbox
+              ref="map"
               accessToken="pk.eyJ1IjoidHJpcHRlYyIsImEiOiJja2R0d2ZtNHMwMGM5MzdxNHVwZGcyeG1xIn0.yAZW46zUKkS9RL3O7kBWaQ"
               mapStyle="mapbox://styles/mapbox/light-v9"
               latitude="60.6708058985168"
@@ -30,6 +31,7 @@
 <script>
   import Info from './Info'
   import * as utils from "utils/utils";
+
   export default {
     data() {
       return {
@@ -37,14 +39,16 @@
       }
     },
     methods: {
-        onSaveTap() {
-            this.$navigateTo(Info);
+        async onSaveTap() {
+          const center = await this.$refs.map.nativeView.getCenter();
+          this.$store.state.selectedCoordinates = center;
+          this.$navigateTo(Info);
         },
         onRetrievePositionTap() {
 
         },
-        onMapReady(args) {
-        args.map.addMarkers([
+        async onMapReady(args) {
+        /*args.map.addMarkers([
           {
             lat: 60.6708058985168,
             lng: 17.14024985657789,
@@ -54,7 +58,7 @@
               utils.openUrl("https://fpx.se/");
             }
           }
-        ]);
+        ]);*/
       }
     }
   }
