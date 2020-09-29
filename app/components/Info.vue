@@ -58,12 +58,25 @@
         otherInfo: null,
 
         propertyTypes: ["Villa", "Lägenhet"],
-        timeFrames: ["12h", "24h", "48h", "72h"]
+        timeFrames: [12, 24, 48, 72]
       }
     },
     methods: {
+        roundToHour(date) {
+            const hourMs = 60 * 60 * 1000;
+            return new Date(Math.ceil(date.getTime() / hourMs) * hourMs);
+        },
+        dateToString(date) {
+            const str = `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+
+            return str;
+        },
         async onBookTap() {
             const coords = this.$store.state.selectedCoordinates;
+            const start = this.roundToHour(new Date());
+            const end = this.roundToHour(new Date());
+            const hours = this.timeFrames[this.selectedTimeFrame];
+            end.setTime(end.getTime() + (hours*60*60*1000));
 
             const items = {
                 "type": "FeatureCollection",
@@ -76,7 +89,8 @@
                         },
                         "properties": {
                             "property_type": this.propertyTypes[this.selectedPropertyType],
-                            "time_frame": this.timeFrames[this.selectedTimeFrame],
+                            "start": this.dateToString(start),
+                            "end": this.dateToString(end),
                             "retriever": this.pantRetrievers[this.$refs.pantRetrieversDropDown.nativeView.selectedIndex],
                             "floor_info": this.floorInfo,
                             "other_info": this.otherInfo
