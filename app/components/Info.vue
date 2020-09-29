@@ -65,28 +65,45 @@
         async onBookTap() {
             const coords = this.$store.state.selectedCoordinates;
 
-            const item = {
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [coords.lng, coords.lat]
-                },
-                "properties": {
-                    "property_type": this.propertyTypes[this.selectedPropertyType],
-                    "time_frame": this.timeFrames[this.selectedTimeFrame],
-                    "retriever": this.pantRetrievers[this.$refs.pantRetrieversDropDown.nativeView.selectedIndex],
-                    "floor_info": this.floorInfo,
-                    "other_info": this.otherInfo
-                }
+            const items = {
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [coords.lng, coords.lat]
+                        },
+                        "properties": {
+                            "property_type": this.propertyTypes[this.selectedPropertyType],
+                            "time_frame": this.timeFrames[this.selectedTimeFrame],
+                            "retriever": this.pantRetrievers[this.$refs.pantRetrieversDropDown.nativeView.selectedIndex],
+                            "floor_info": this.floorInfo,
+                            "other_info": this.otherInfo
+                        }
+                    }
+                ]
             };
 
-            const collections = await collection.getByName("fpx_recycle_consumer");
-            const recycleCollection = collections.find(c => c.provider_uuid == user.provider_uuid);
+            console.log("creating session");
+            await session.create("recycleconsumer@gia.fpx.se", "test");
+            console.log(session.token);
+            
+            console.log("fetching collections by name");
+            const collections = await collection.fetchCollections();
+            console.log("collections: " + collections);
 
-            if (recycleCollection == NULL) {
+            let recycleCollection = collections.find(c => c.name == "fpx_recycle_consumer" && c.provider_uuid == session.user.provider_uuid);
+            console.log("recycleCollection: " + recycleCollection);
+
+            if (recycleCollection == null) {
+                console.log("creating new collection");
                 recycleCollection = await collection.create("fpx_recycle_consumer", false);
+                console.log("created collection: " + recycleCollection);
             }
 
-            await collection.addItem(recycleCollection.uuid, item);
+            console.log("adding item to collection");
+            await collection.addItems(recycleCollection.uuid, items);
 
             this.$navigateTo(Submitted);
         },

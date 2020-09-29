@@ -1,19 +1,33 @@
-const BASE_URL = "http://dev.gia.fpx.se/api/v1";
+const BASE_URL = "http://dev.gia.fpx.se";
+
+import session from './session'
 
 export default {
   async validateResponse(response) {
     if (!response.ok) throw new Error(await response.text());
   },
-  async getByName(collectionName) {
-    console.debug('getByName');
+  async fetchCollections() {
     const headers = {
       Accept: `application/json`,
     };
 
     if (session.authenticated()) headers.Authorization = `Bearer ${session.token}`;
 
-    const response = await fetch(`${BASE_URL}/collections/by_name/${collectionName}`, {
+    const response = await fetch(`${BASE_URL}/collections`, {
       headers,
+    });
+
+    await this.validateResponse(response);
+
+    const data = await response.json();
+    return data;
+  },
+  async fetchCollection(collectionId) {
+    const response = await fetch(`${BASE_URL}/collections/${collectionId}`, {
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+        Accept: `application/json`,
+      },
     });
 
     await this.validateResponse(response);
@@ -43,15 +57,16 @@ export default {
     console.debug('items fetched');
     return data;
   },
-  async addItem(collectionId, item) {
+  async addItems(collectionId, items) {
     const response = await fetch(`${BASE_URL}/collections/${collectionId}/items`, {
       method: 'PUT',
       mode: 'cors',
       headers: {
         Authorization: `Bearer ${session.token}`,
-        'Content-Type': `application/json`,
+        'Content-Type': `application/geojson`,
+        Accept: "application/geojson"
       },
-      body: JSON.stringify(item)
+      body: JSON.stringify(items)
     });
 
     await this.validateResponse(response);

@@ -1,4 +1,4 @@
-const BASE_URL = "http://dev.gia.fpx.se/api/v1";
+const BASE_URL = "http://dev.gia.fpx.se";
 
 export default {
   token: null,
@@ -15,13 +15,12 @@ export default {
         Accept: `application/json`,
       },
       body: JSON.stringify({
-        email,
-        password,
+        email: email,
+        password: password
       }),
     });
-
+    
     await this.validateResponse(response);
-
     this.token = (await response.json()).token;
     this.user = await this.getUser();
   },
