@@ -1,5 +1,5 @@
 <template>
-    <Page actionBarHidden="true" style="margin: 5px;">
+    <Page @loaded="onPageLoaded" actionBarHidden="true" style="margin: 5px;">
         <GridLayout rows="auto, *, auto, *, auto, *, auto, *, auto, *, auto">
           <StackLayout row="0" style="border-width: 2px; border-radius: 5 5 5 5; border-color: #c4c1c0;">
             <Label text="Håll dig uppdaterad genom pushnotifikationer" fontWeight="bold" horizontalAlignment="center"/>
@@ -13,9 +13,9 @@
           </StackLayout>
           <StackLayout row="4">
             <Label text="Bokad hämtning" horizontalAlignment="center" fontWeight="bold"/>
-            <Label text="Du har ingen bokad hämtning"/>
-            <Label text="Väntar på bekräftelse"/>
-            <Label text="Estimerad hämtning Onsdag 21/11 18:00-20:00"/>
+            <Label v-for="(item) in recycleCollectionItems" :key="item.uuid">
+              {{ item.properties.start }} - {{item.properties.end}} - {{item.properties.retriever}}
+            </Label>
           </StackLayout>
           <Label row="6" text="Du har donerat pant 10 gånger" horizontalAlignment="center" fontWeight="bold"/>
           <StackLayout row="8">
@@ -29,13 +29,29 @@
 
 <script>
   import PlaceMarker from './PlaceMarker'
+  import session from '../services/session'
+  import collection from '../services/collection'
 
   export default {
     data() {
       return {
+        recycleCollectionItems: null
       }
     },
     methods: {
+      async onPageLoaded() {
+        if (session.token == null) {
+          await session.create("recycleconsumer@gia.fpx.se", "test");
+        }
+        
+        const collections = await collection.fetchCollections();
+        const recycleCollection = collections.find(c => c.name == "fpx_recycle_consumer" && c.provider_uuid == session.user.provider_uuid);
+        
+        if (recycleCollection != null) {
+          this.recycleCollectionItems = await collection.fetchItems(recycleCollection.uuid);
+          this.recycleCollectionItems = this.recycleCollectionItems.filter(item => item.properties.start != null);
+        }
+      },
       onBookNewTap() {
         this.$navigateTo(PlaceMarker);
       },

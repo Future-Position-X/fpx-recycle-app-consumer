@@ -35,26 +35,23 @@ export default {
     const data = await response.json();
     return data;
   },
-  async fetchItems(signal, collectionId, bounds, simplify) {
-    console.debug('fetchItems');
+  async fetchItems(collectionId) {
     const headers = {
-      Accept: `application/geojson`,
+      Accept: `application/json`,
     };
 
     if (session.authenticated()) headers.Authorization = `Bearer ${session.token}`;
 
     const response = await fetch(
-      `${BASE_URL}/collections/${collectionId}/items?limit=100000&spatial_filter=intersect&spatial_filter.envelope.xmin=${bounds.minX}&spatial_filter.envelope.ymin=${bounds.minY}&spatial_filter.envelope.xmax=${bounds.maxX}&spatial_filter.envelope.ymax=${bounds.maxY}&simplify=${simplify}`,
+      `${BASE_URL}/collections/${collectionId}/items?limit=100000`,
       {
         headers,
-        signal,
       }
     );
 
     await this.validateResponse(response);
 
     const data = await response.json();
-    console.debug('items fetched');
     return data;
   },
   async addItems(collectionId, items) {
