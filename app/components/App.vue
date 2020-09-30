@@ -1,7 +1,7 @@
 <template>
     <Page @loaded="onPageLoaded" actionBarHidden="true" style="margin: 5px;">
         <GridLayout rows="auto, *, auto, *, auto, *, auto, *, auto, *, auto">
-          <StackLayout row="0" style="border-width: 2px; border-radius: 5 5 5 5; border-color: #c4c1c0;">
+          <StackLayout row="0" style="border-width: 2px; border-radius: 5px 5px 5px 5px; border-color: #c4c1c0;">
             <Label text="Håll dig uppdaterad genom pushnotifikationer" fontWeight="bold" horizontalAlignment="center"/>
             <Label textWrap="true" horizontalAlignment="center" text="Pushar är det snabbaste och smidigaste sättet att få information om när din pant hämtas och/eller när det finns annan panthämtning inbokad i ditt område."/>
             <Button @onTap="onAllowNotificationsTap" text="Tillåt pushnotifikationer"/>

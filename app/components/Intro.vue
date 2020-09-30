@@ -1,7 +1,7 @@
 <template>
-    <Page actionBarHidden="true" style="margin: 5px;">
-        <GridLayout rows="*, auto">
-          <Carousel row="0" height="100%" width="100%" indicatorColor="#757575" indicatorColorUnselected="#989898" finite="true" bounce="false" showIndicator="true" android:indicatorAnimation="swap">
+    <Page actionBarHidden="true" class="coverImage" style="margin: 5px;">
+        <GridLayout rows="*, auto" width="90%" height="90%">
+          <Carousel row="0" height="30%" width="80%" indicatorColor="#757575" indicatorColorUnselected="#989898" finite="true" bounce="false" showIndicator="true" android:indicatorAnimation="swap">
             <CarouselItem verticalAlignment="middle">
                 <GridLayout>
                   <StackLayout horizontalAlignment="center" verticalAlignment="center">
@@ -51,4 +51,10 @@
 </script>
 
 <style scoped>
+.coverImage {
+    background-image: url('~/assets/images/pantr_splash.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
 </style>
