@@ -1,11 +1,11 @@
 <template>
   <Page actionBarHidden="true" class="coverImage" margin="5">
     <GridLayout width="100%" height="90%">
-      <GridLayout height="500" background="white" margin="20" padding="30" borderRadius="20" androidElevation="12">
-        <StackLayout>
-          <Image src="~/assets/images/icon_can@3x.png" stretch="none" horizontalAlignment="center"/>
-          <Carousel width="100%" height="100%" indicatorColor="#26001c" indicatorColorUnselected="#f2f2f2" finite="true"
-                    bounce="false" showIndicator="true" android:indicatorAnimation="swap" marginTop="30">
+      <GridLayout height="500" background="white" margin="20" padding="0" borderRadius="20" androidElevation="12">
+        <GridLayout margin="30 30 15">
+          <Image src="~/assets/images/icon_can@3x.png" stretch="none" horizontalAlignment="center" />
+          <Carousel width="100%" height="65%" indicatorColor="#26001c" indicatorColorUnselected="#f2f2f2" finite="true"
+                    bounce="false" showIndicator="true" android:indicatorAnimation="swap" marginBottom="45" verticalAlignment="bottom">
             <CarouselItem>
               <GridLayout>
                 <StackLayout>
@@ -37,7 +37,7 @@
               </GridLayout>
             </CarouselItem>
           </Carousel>
-        </StackLayout>
+        </GridLayout>
       </GridLayout>
       <!--<Button @onTap="onReadyTap" row="5" text="Jag är redo" verticalAlignment="bottom"/>-->
     </GridLayout>
