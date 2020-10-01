@@ -48,7 +48,7 @@
           </Carousel>
         </GridLayout>
       </GridLayout>
-      <!--<Button @onTap="onReadyTap" row="5" text="Jag är redo" verticalAlignment="bottom"/>-->
+      <Button @onTap="onReadyTap" text="Börja panta!" verticalAlignment="bottom" textTransform="none" background="#1f2d40" color="white"/>
     </GridLayout>
   </Page>
 </template>
