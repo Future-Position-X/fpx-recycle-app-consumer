@@ -48,7 +48,7 @@
           </Carousel>
         </GridLayout>
       </GridLayout>
-      <Button @onTap="onReadyTap" text="Börja panta!" verticalAlignment="bottom" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="60" fontSize="22"/>
+      <Button @onTap="onReadyTap" text="Börja panta!" verticalAlignment="bottom" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21"/>
     </GridLayout>
   </Page>
 </template>
