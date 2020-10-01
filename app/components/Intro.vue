@@ -48,13 +48,13 @@
           </Carousel>
         </GridLayout>
       </GridLayout>
-      <Button @onTap="onReadyTap" text="Börja panta!" verticalAlignment="bottom" textTransform="none" background="#1f2d40" color="white"/>
+      <Button @onTap="onReadyTap" text="Börja panta!" verticalAlignment="bottom" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="60" fontSize="22"/>
     </GridLayout>
   </Page>
 </template>
 
 <script>
-import App from './App'
+import PlaceMarker from './PlaceMarker'
 
 export default {
   data() {
@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     onReadyTap() {
-      this.$navigateTo(App);
+      this.$navigateTo(PlaceMarker);
     }
   }
 }
