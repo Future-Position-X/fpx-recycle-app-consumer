@@ -1,6 +1,14 @@
 <template>
     <Page actionBarHidden="true" style="margin: 5px;">
-        <ScrollView>
+        <GridLayout rows="auto, *" marginLeft="15">
+            <Image row="0" src="~/assets/images/dots.png" stretch="fill" horizontalAlignment="left" verticalAlignment="top" marginTop="30" marginLeft="25" width="25" height="25"/>
+            <Image row="0" src="~/assets/images/Pantr_logo@3x.png" stretch="fill" horizontalAlignment="center" verticalAlignment="top" width="150" height="35" marginTop="25"/>
+            <Image row="0" src="~/assets/images/icon_help@3x.png" stretch="fill" horizontalAlignment="right" verticalAlignment="top" marginTop="30" marginRight="25" width="25" height="25"/>
+            <StackLayout row="1" marginTop="18">
+                <Label text="Välkommen!" fontWeight="bold" fontSize="23" class="primaryTextColor" />
+            </StackLayout>
+        </GridLayout>
+        <!--<ScrollView>
             <GridLayout rows="auto, *, auto, *, auto, *, auto, *, auto, *, auto, *, auto">
                 <Label row="0" text="Information" fontWeight="bold" horizontalAlignment="center"/>
                 <StackLayout row="2">
@@ -37,7 +45,7 @@
                     <Button @onTap="onCancelTap" text="Avbryt"/>
                 </StackLayout>
             </GridLayout>
-        </ScrollView>
+        </ScrollView>-->
     </Page>
 </template>
 
