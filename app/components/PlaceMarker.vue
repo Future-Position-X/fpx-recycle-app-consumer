@@ -30,7 +30,7 @@
             </FormattedString>
           </Label>-->
           <FlexboxLayout justifyContent="center" alignItems="center" androidElevation="12" background="white" borderRadius="20" width="80%" height="60" verticalAlignment="top" marginTop="90">
-            <Label fontSize="18">
+            <Label fontSize="18" class="bodyTextColor">
               <FormattedString>
                 <Span text="Det finns"/>
                 <Span text=" 5 " fontWeight="bold" />
@@ -41,12 +41,10 @@
 
           <GridLayout borderRadius="20" verticalAlignment="center" horizontalAlignment="center" background="white" androidElevation="12" margin="30" padding="30">
             <StackLayout>
-              <Image src="~/assets/images/icon_can@3x.png" stretch="none" horizontalAlignment="center" />
-              <Label text="Välkommen!" fontWeight="bold" fontSize="45" class="primaryTextColor" />
-              <Label class="primaryTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
-                      text="Med hjälp av denna tjänst kan du enkelt skänka din pant till lokala föreningar och skolor."/>
-              <Label class="primaryTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
-                      text="Panten hämtas där du bor, och du slipper allt besvär med att själv transportera och panta den, pengarna går oavkortat till den som hämtar den."/>
+              <Image src="~/assets/images/icon_heart@3x.png" stretch="none" horizontalAlignment="center" />
+              <Label text="Tack!" fontWeight="bold" fontSize="37" class="titleColor" horizontalAlignment="center" marginTop="10" />
+              <Label text="Genom att skänka pant så hjälper du skolor och föreningsliv i ditt närområde att skapa bra förutsättningar för ett välmående samhälle" marginTop="10" textWrap="true" lineHeight="3" fontSize="18" class="bodyTextColor" />
+              <Button @onTap="onRetrievePositionTap" text="Fortsätt" verticalAlignment="bottom" marginTop="39" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" class="bodyTextColor"/>
             </StackLayout>
           </GridLayout>
           <!--<StackLayout row="1" style="margin: 5px;">
@@ -91,8 +89,8 @@
           this.$navigateTo(Info);
         },
         onRetrievePositionTap() {
-          //this.$navigateTo(Info);
-          this.$showModal(ModalTest);
+          this.$navigateTo(Info);
+          //this.$showModal(ModalTest);
         },
         async onMapReady(args) {
         /*args.map.addMarkers([

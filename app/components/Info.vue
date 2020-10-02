@@ -6,20 +6,20 @@
             <Image row="0" src="~/assets/images/Pantr_logo@3x.png" stretch="fill" horizontalAlignment="center" verticalAlignment="top" width="150" height="35" marginTop="25"/>
             <Image row="0" src="~/assets/images/icon_help@3x.png" stretch="fill" horizontalAlignment="right" verticalAlignment="top" marginTop="30" marginRight="25" width="25" height="25"/>
             <StackLayout row="1" marginTop="18">
-                <Label text="Inställningar" fontWeight="bold" fontSize="23" class="primaryTextColor" />
-                <Label text="Hur bor du?" fontWeight="bold" fontSize="18" class="primaryTextColor" marginTop="22" />
+                <Label text="Inställningar" fontWeight="bold" fontSize="23" class="titleColor" />
+                <Label text="Hur bor du?" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22" />
                 <SegmentedBar selectedIndex="0" v-model="selectedPropertyType" background="#e3e3e4" selectedBackgroundColor="white" borderRadius="10" height="35" marginTop="10">
                     <SegmentedBarItem title="Villa" />
                     <SegmentedBarItem title="Lägenhet" />
                 </SegmentedBar>
-                <Label text="Inom vilken tidsram kan vi hämta panten?" fontWeight="bold" fontSize="18" class="primaryTextColor" marginTop="22" />
+                <Label text="Inom vilken tidsram kan vi hämta panten?" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22" />
                 <SegmentedBar selectedIndex="3" background="#e3e3e4" selectedBackgroundColor="white" borderRadius="10" height="35" marginTop="10">
                     <SegmentedBarItem title="12h" />
                     <SegmentedBarItem title="24h" />
                     <SegmentedBarItem title="48h" />
                     <SegmentedBarItem title="72h" />
                 </SegmentedBar>
-                <Label row=0 text="Storlek på panten" fontWeight="bold" fontSize="18" class="primaryTextColor" marginTop="22" />
+                <Label row=0 text="Storlek på panten" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22" />
                 <GridLayout rows="auto, auto" columns="*, *, *" marginTop="10">
                     <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="0" src="~/assets/images/icon_small_load@3x.png"/>
                     <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="1" marginRight="25" src="~/assets/images/icon_small_load@3x.png"/>
@@ -31,14 +31,14 @@
                         <SegmentedBarItem title="Stor" />
                     </SegmentedBar>
                 </GridLayout>
-                <Label text="Panthämtare" fontWeight="bold" fontSize="18" class="primaryTextColor" marginTop="22" />
+                <Label text="Panthämtare" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22" />
                 <GridLayout paddingLeft="15" marginTop="10" background="white" height="50" borderRadius="30" borderWidth="1" borderColor="#e7e7e8">
                     <DropDown style="font-size: 18px;" ref="pantRetrieversDropDown" :items="pantRetrievers" selectedIndex="selectedPantRetriever" itemsPadding="20" itemsTextAlignment="center" verticalAlignment="middle"/>
                 </GridLayout>
-                <Label text="Övrig information" fontWeight="bold" fontSize="18" class="primaryTextColor" marginTop="22" />
+                <Label text="Övrig information" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22" />
                 <TextView marginTop="10" background="white" height="55" borderRadius="30" borderWidth="1" borderColor="#e7e7e8"/>
                 <Button row="2" @onTap="onBookTap" text="Boka hämtning" verticalAlignment="bottom" textTransform="none" background="#0aa67a" color="white" borderRadius="40" width="60%" height="57" fontSize="21" marginTop="40"/>
-            <Button row="2" text="Byt plats" verticalAlignment="bottom" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" marginTop="30" marginBottom="50"/>
+            <Button row="2" text="Byt plats" verticalAlignment="bottom" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" marginTop="5" marginBottom="50"/>
             </StackLayout>
         </GridLayout>
         </ScrollView>

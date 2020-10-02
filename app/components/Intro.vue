@@ -10,10 +10,10 @@
               <GridLayout>
                 <StackLayout>
                   <Image src="~/assets/images/icon_can@3x.png" stretch="none" horizontalAlignment="center" />
-                  <Label text="Välkommen!" fontWeight="bold" fontSize="45" class="primaryTextColor" />
-                  <Label class="primaryTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
+                  <Label text="Välkommen!" fontWeight="bold" fontSize="45" class="titleColor" />
+                  <Label class="bodyTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
                          text="Med hjälp av denna tjänst kan du enkelt skänka din pant till lokala föreningar och skolor."/>
-                  <Label class="primaryTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
+                  <Label class="bodyTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
                          text="Panten hämtas där du bor, och du slipper allt besvär med att själv transportera och panta den, pengarna går oavkortat till den som hämtar den."/>
                 </StackLayout>
               </GridLayout>
@@ -22,10 +22,10 @@
               <GridLayout>
                 <StackLayout>
                   <Image src="~/assets/images/icon_mapmark@3x.png" stretch="none" horizontalAlignment="center" />
-                  <Label text="Såhär fungerar det:" fontWeight="bold" fontSize="25" class="primaryTextColor" marginTop="41" />
-                  <Label class="primaryTextColor" textWrap="true" marginTop="22" lineHeight="3" fontSize="18"
+                  <Label text="Såhär fungerar det:" fontWeight="bold" fontSize="25" class="titleColor" marginTop="41" />
+                  <Label class="bodyTextColor" textWrap="true" marginTop="22" lineHeight="3" fontSize="18"
                          text="Du placerar ut en plats på kartan där din pant kan hämtas upp."/>
-                  <Label class="primaryTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
+                  <Label class="bodyTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
                          text="Om din plats ligger inom ett upphämtningsområde kan din pant hämtas upp. Om du inte vill ställa ut din pant i förväg kan du skriva instruktioner om hur överlämningen bör gå till."/>
                 </StackLayout>
               </GridLayout>
@@ -34,8 +34,8 @@
               <GridLayout>
                 <StackLayout>
                   <Image src="~/assets/images/icon_que@3x.png" stretch="none" horizontalAlignment="center" />
-                  <Label text="Frågor & support" fontWeight="bold" fontSize="25" class="primaryTextColor" marginTop="41" />
-                  <Label class="primaryTextColor" textWrap="true" marginTop="22" lineHeight="3" fontSize="18">
+                  <Label text="Frågor & support" fontWeight="bold" fontSize="25" class="titleColor" marginTop="41" />
+                  <Label class="bodyTextColor" textWrap="true" marginTop="22" lineHeight="3" fontSize="18">
                     <FormattedString>
                       <Span text="Stöter du på något problem eller undrar om något gällande appen så kan du alltid kontakta oss på"/>
                       <Span text=" info@pantr-app.se " fontWeight="bold" />
