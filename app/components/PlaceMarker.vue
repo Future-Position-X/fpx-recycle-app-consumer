@@ -21,7 +21,7 @@
           <Image src="~/assets/images/dots.png" stretch="fill" horizontalAlignment="left" verticalAlignment="top" marginTop="30" marginLeft="25" width="25" height="25"/>
           <Image src="~/assets/images/Pantr_logo@3x.png" stretch="fill" horizontalAlignment="center" verticalAlignment="top" width="150" height="35" marginTop="25"/>
           <Image src="~/assets/images/icon_help@3x.png" stretch="fill" horizontalAlignment="right" verticalAlignment="top" marginTop="30" marginRight="25" width="25" height="25"/>
-          <Button @onTap="onRetrievePositionTap" text="Boka hämtning" verticalAlignment="bottom" horizontalAlignment="bottom" marginBottom="39" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21"/>
+          <Button @onTap="onBook" text="Boka hämtning" verticalAlignment="bottom" horizontalAlignment="bottom" marginBottom="39" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21"/>
           <!--<Label class="primaryTextColor" textAlignment="center" padding="5" textWrap="true" marginTop="150" lineHeight="3" fontSize="18" background="white" borderRadius="20" width="80%" height="50" verticalAlignment="top">
             <FormattedString>
               <Span text="Det finns"/>
@@ -39,12 +39,13 @@
             </Label>
           </FlexboxLayout>
 
-          <GridLayout borderRadius="20" verticalAlignment="center" horizontalAlignment="center" background="white" androidElevation="12" margin="30" padding="30">
+          <GridLayout v-if="showMapHelp" borderRadius="20" verticalAlignment="center" horizontalAlignment="center" background="white" androidElevation="12" margin="30" padding="30">
             <StackLayout>
-              <Image src="~/assets/images/icon_heart@3x.png" stretch="none" horizontalAlignment="center" />
-              <Label text="Tack!" fontWeight="bold" fontSize="37" class="titleColor" horizontalAlignment="center" marginTop="10" />
-              <Label text="Genom att skänka pant så hjälper du skolor och föreningsliv i ditt närområde att skapa bra förutsättningar för ett välmående samhälle" marginTop="10" textWrap="true" lineHeight="3" fontSize="18" class="bodyTextColor" />
-              <Button @onTap="onRetrievePositionTap" text="Fortsätt" verticalAlignment="bottom" marginTop="39" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" class="bodyTextColor"/>
+              <Image src="~/assets/images/icon_mapmark@3x.png" stretch="none" horizontalAlignment="center" />
+              <Label text="Placera markören där panten kan hämtas. Försök vara så exakt som möjligt, för att underlätta och snabba upp upphämtningen." marginTop="10" textWrap="true" lineHeight="3" fontSize="18" class="bodyTextColor" />
+              <Label text="Särskilt viktigt är det att platsen du väljer är lätt att nå från allmän väg, och att den som hämtar din pant har tillåtelse att beträda området." marginTop="10" textWrap="true" lineHeight="3" fontSize="18" class="bodyTextColor" />
+              <Button @onTap="onDismissHelp" text="OK, jag förstår!" verticalAlignment="bottom" marginTop="39" textTransform="none" background="#0aa67a" color="white" borderRadius="40" width="80%" height="57" fontSize="21" class="bodyTextColor"/>
+              <Button @onTap="onRetrievePositionTap" text="Hämta min position" verticalAlignment="bottom" marginTop="10" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="80%" height="57" fontSize="21" class="bodyTextColor"/>
             </StackLayout>
           </GridLayout>
           <!--<StackLayout row="1" style="margin: 5px;">
@@ -79,11 +80,14 @@
   export default {
     data() {
       return {
-        showModal: false
+        showMapHelp: true
       }
     },
     methods: {
-        async onSaveTap() {
+        onDismissHelp() {
+          this.showMapHelp = false;
+        },
+        async onBook() {
           const center = await this.$refs.map.nativeView.getCenter();
           this.$store.state.selectedCoordinates = center;
           this.$navigateTo(Info);
