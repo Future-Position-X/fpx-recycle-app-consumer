@@ -1,12 +1,32 @@
 <template>
-    <Page actionBarHidden="true" style="margin: 5px;">
-        <GridLayout rows="auto, *" marginLeft="15">
+    <Page actionBarHidden="true" style="margin: 5px;" background="#f2f2f2">
+        <GridLayout rows="auto, *, auto" marginLeft="15">
             <Image row="0" src="~/assets/images/dots.png" stretch="fill" horizontalAlignment="left" verticalAlignment="top" marginTop="30" marginLeft="25" width="25" height="25"/>
             <Image row="0" src="~/assets/images/Pantr_logo@3x.png" stretch="fill" horizontalAlignment="center" verticalAlignment="top" width="150" height="35" marginTop="25"/>
             <Image row="0" src="~/assets/images/icon_help@3x.png" stretch="fill" horizontalAlignment="right" verticalAlignment="top" marginTop="30" marginRight="25" width="25" height="25"/>
             <StackLayout row="1" marginTop="18">
                 <Label text="Välkommen!" fontWeight="bold" fontSize="23" class="primaryTextColor" />
+                <Label text="Hur bor du?" fontWeight="bold" fontSize="18" class="primaryTextColor" marginTop="16" />
+                <SegmentedBar selectedIndex="0" v-model="selectedPropertyType" background="#e3e3e4" selectedBackgroundColor="white" borderRadius="10" height="35" marginTop="10">
+                    <SegmentedBarItem title="Villa" />
+                    <SegmentedBarItem title="Lägenhet" />
+                </SegmentedBar>
+                <Label text="Inom vilken tidsram kan vi hämta panten?" fontWeight="bold" fontSize="18" class="primaryTextColor" marginTop="16" />
+                <SegmentedBar selectedIndex="0" v-model="selectedTimeFrame" background="#e3e3e4" selectedBackgroundColor="white" borderRadius="10" height="35" marginTop="10">
+                    <SegmentedBarItem title="12h" />
+                    <SegmentedBarItem title="24h" />
+                    <SegmentedBarItem title="48h" />
+                    <SegmentedBarItem title="72h" />
+                </SegmentedBar>
+                <Label text="Panthämtare" fontWeight="bold" fontSize="18" class="primaryTextColor" marginTop="16" />
+                <GridLayout marginTop="10" background="white" height="50" borderRadius="30" borderWidth="1" borderColor="#e7e7e8">
+                    <DropDown ref="pantRetrieversDropDown" :items="pantRetrievers" selectedIndex="selectedPantRetriever" />
+                </GridLayout>
+                <Label text="Övrig information" fontWeight="bold" fontSize="18" class="primaryTextColor" marginTop="16" />
+                <TextView marginTop="10" background="white" height="55" borderRadius="30" borderWidth="1" borderColor="#e7e7e8"/>
             </StackLayout>
+            <Button row="2" @onTap="onBookTap" text="Boka hämtning" verticalAlignment="bottom" textTransform="none" background="#0aa67a" color="white" borderRadius="40" width="60%" height="57" fontSize="21" marginBottom="92"/>
+            <Button row="2" text="Byt plats" verticalAlignment="bottom" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" marginBottom="30"/>
         </GridLayout>
         <!--<ScrollView>
             <GridLayout rows="auto, *, auto, *, auto, *, auto, *, auto, *, auto, *, auto">
