@@ -21,7 +21,7 @@
                   </Label>
                 </StackLayout>
               </GridLayout>
-              <Label text="Dina bookade hämtningar" fontWeight="bold" fontSize="21" class="titleColor" marginTop="20" />
+              <Label text="Dina bokade hämtningar" fontWeight="bold" fontSize="21" class="titleColor" marginTop="20" />
               <GridLayout v-for="(item, index) in bookedRuns" :key="item.id" columns="*, auto" padding="10 15" margin="5 10" borderRadius="20" backgroundColor="white" androidElevation="12">
                 <StackLayout col=0>
                   <Label margin="2 0" textWrap="true" fontSize="18" class="bodyTextColor" fontWeight="bold">{{item.title}}</Label>
@@ -29,6 +29,27 @@
                 </StackLayout>
                 <Image col="1" :src="statusImages[item.status]" stretch="fill" verticalAlignment="center" marginRight="15" width="30" height="30"/>
               </GridLayout>
+
+              <GridLayout borderRadius="20" verticalAlignment="center" horizontalAlignment="center" background="white" androidElevation="12" margin="40 10" padding="5 10">
+                <StackLayout>
+                  <StackLayout borderBottomColor="#ddd" borderBottomWidth="1" paddingBottom="20">
+                    <Image src="~/assets/images/icon_psuh_notification@3x.png" stretch="none" horizontalAlignment="center" />
+                    <Label text="Håll dig uppdaterad" fontWeight="bold" fontSize="21" class="titleColor" marginTop="10" />
+                    <Label text="Pushnotiser är det snabbaste och smidigaste sättet att få information om när din pant hämtas och/eller när det finns annan panthämtning inbokad i ditt område." marginTop="10" textWrap="true" lineHeight="3" fontSize="18" class="bodyTextColor" />
+                  </StackLayout>
+                  <GridLayout columns="*, auto" paddingTop="20" paddingBottom="15">
+                    <Label column="0" marginBottom="4" text="Aktivera pushnotiser" class="bodyTextColor" fontSize="18"/>
+                    <Switch column="1" />
+                  </GridLayout>
+                </StackLayout>
+              </GridLayout>
+
+              <GridLayout rows="*, *" padding="10 15" margin="5 10" borderRadius="20" backgroundColor="white" androidElevation="12">
+                <Label row="0" horizontalAlignment="center" text="Du har donerat pant" fontWeight="bold" fontSize="21" class="titleColor" />
+                <Image row="1" src="~/assets/images/circle@3x.png" horizontalAlignment="center" stretch="none"/>
+              </GridLayout>
+
+              <Button text="Boka ny hämtning" marginTop="10" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" class="bodyTextColor"/>
             </StackLayout>
             </StackLayout>
         </GridLayout>
