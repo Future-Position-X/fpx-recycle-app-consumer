@@ -36,6 +36,8 @@
                         <GridLayout paddingLeft="15" marginTop="10" background="white" height="50" borderRadius="30" borderWidth="1" borderColor="#e7e7e8">
                             <DropDown style="font-size: 18px;" ref="pantRetrieversDropDown" :items="pantRetrievers" selectedIndex="selectedPantRetriever" itemsPadding="20" itemsTextAlignment="center" verticalAlignment="middle"/>
                         </GridLayout>
+                        <Label text="Vilken trappa och våning?" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22" />
+                        <TextView marginTop="10" background="white" height="55" borderRadius="30" borderWidth="1" borderColor="#e7e7e8"/>
                         <Label text="Övrig information" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22" />
                         <TextView marginTop="10" background="white" height="55" borderRadius="30" borderWidth="1" borderColor="#e7e7e8"/>
                         <Button row="2" @onTap="onBookTap" text="Boka hämtning" verticalAlignment="bottom" textTransform="none" background="#0aa67a" color="white" borderRadius="40" width="60%" height="57" fontSize="21" marginTop="40"/>
