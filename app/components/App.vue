@@ -51,7 +51,7 @@
                 <Label row="1" text="Gånger" horizontalAlignment="center" color="white" fontSize="16" marginTop="30"/>
               </GridLayout>
 
-              <Button text="Boka ny hämtning" marginTop="20" marginBottom="40" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" class="bodyTextColor"/>
+              <Button @onTap="onBookNewTap" text="Boka ny hämtning" marginTop="20" marginBottom="40" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" class="bodyTextColor"/>
             </StackLayout>
             </StackLayout>
         </GridLayout>
