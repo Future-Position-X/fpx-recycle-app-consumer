@@ -101,8 +101,8 @@
           this.$navigateTo(Info);
           //this.$showModal(ModalTest);
         },
-        onMapMove(args) {
-          console.log(args);
+        onMapMove(event) {
+          console.log(JSON.stringify(event.event));
         },
         async onMapReady(args) {
           let collectors = await collection.fetchItemsByNameWithin("pantr-collectors", {x: 17.1413864, y: 60.6746827}, 5000);
