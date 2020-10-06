@@ -61,6 +61,7 @@
 <script>
   import Info from './Info'
   import * as utils from "utils/utils";
+  import collection from "../services/collection";
 
   const ModalTest = {
     template: `
@@ -97,6 +98,8 @@
           //this.$showModal(ModalTest);
         },
         async onMapReady(args) {
+          let collectors = await collection.fetchItemsByNameWithin("pantr-collectors", {x: 17.1413864, y: 60.6746827}, 5000);
+          console.log(collectors);
         /*args.map.addMarkers([
           {
             lat: 60.6708058985168,

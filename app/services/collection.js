@@ -1,4 +1,4 @@
-const BASE_URL = "http://dev.gia.fpx.se";
+const BASE_URL = "http://dev.gia.fpx.se/api/v1";
 
 import session from './session'
 
@@ -54,6 +54,28 @@ export default {
     const data = await response.json();
     return data;
   },
+
+  async fetchItemsByNameWithin(collectionName, point, distance) {
+    const headers = {
+      Accept: `application/json`,
+    };
+
+    if (session.authenticated()) headers.Authorization = `Bearer ${session.token}`;
+
+    console.log("YOLO")
+    const response = await fetch(
+      `${BASE_URL}/collections/by_name/${collectionName}/items?limit=100000&spatial_filter=within-distance&spatial_filter.distance.x=${point.x}&spatial_filter.distance.y=${point.y}&spatial_filter.distance.d=${distance}`,
+      {
+        headers,
+      }
+    );
+    console.log(response);
+    //await this.validateResponse(response);
+
+    const data = await response.json();
+    return data;
+  },
+
   async addItems(collectionId, items) {
     const response = await fetch(`${BASE_URL}/collections/${collectionId}/items`, {
       method: 'PUT',
