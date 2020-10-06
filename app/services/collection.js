@@ -69,7 +69,6 @@ export default {
         headers,
       }
     );
-    console.log(response);
     //await this.validateResponse(response);
 
     const data = await response.json();
