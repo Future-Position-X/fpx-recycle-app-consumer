@@ -89,6 +89,20 @@ export default {
 
     await this.validateResponse(response);
   },
+  async createItem(collectionId, item) {
+    const response = await fetch(`${BASE_URL}/collections/${collectionId}/items`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+        'Content-Type': `application/json`,
+        Accept: "application/json"
+      },
+      body: JSON.stringify(item)
+    });
+
+    await this.validateResponse(response);
+  },
   async removeItems(items) {
     // eslint-disable-next-line no-restricted-syntax
     for (const item of items) {

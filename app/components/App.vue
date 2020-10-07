@@ -1,5 +1,5 @@
 <template>
-  <Page actionBarHidden="true" background="#f2f2f2">
+  <Page @loaded="onPageLoaded" actionBarHidden="true" background="#f2f2f2">
     <GridLayout>
       <ScrollView>
         <GridLayout rows="auto, *" padding="0 0">
@@ -56,14 +56,6 @@
             </StackLayout>
         </GridLayout>
       </ScrollView>
-      <GridLayout v-if="showThankYou" borderRadius="20" verticalAlignment="center" horizontalAlignment="center" background="white" androidElevation="12" margin="30" padding="30">
-        <StackLayout>
-          <Image src="~/assets/images/icon_heart@3x.png" stretch="none" horizontalAlignment="center" />
-          <Label text="Tack!" fontWeight="bold" fontSize="37" class="titleColor" horizontalAlignment="center" marginTop="10" />
-          <Label text="Genom att skänka pant så hjälper du skolor och föreningsliv i ditt närområde att skapa bra förutsättningar för ett välmående samhälle" marginTop="10" textWrap="true" lineHeight="3" fontSize="18" class="bodyTextColor" />
-          <Button @onTap="onContinue" text="Fortsätt" verticalAlignment="bottom" marginTop="39" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" class="bodyTextColor"/>
-        </StackLayout>
-      </GridLayout>
     </GridLayout>
   </Page>
 
@@ -105,7 +97,6 @@
   export default {
     data() {
       return {
-        recycleCollectionItems: null,
         statusImages: {
           "waiting": "~/assets/images/icon_delete@3x.png",
           "confirmed": "~/assets/images/icon_pantr_on_way@3x.png",
@@ -113,19 +104,19 @@
         },
         bookedRuns: [
           {
-            id:1,
+            id:"a",
             title: "2020-09-28 - Bokad hämtning",
             text: "Gävle fotboll",
             status: "waiting",
           },
           {
-            id:2,
+            id:"b",
             title: "2020-09-28 - Bokad hämtning",
             text: "Gävle ridklubb",
             status: "confirmed",
           },
           {
-            id:3,
+            id:"c",
             title: "2020-08-14 - Bokad hämtning",
             text: "Gävle hockey",
             status: "done",
@@ -151,7 +142,12 @@
       }
     },
     methods: {
+      dateToString(date) {
+          const str = `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+          return str;
+      },
       async onPageLoaded() {
+        console.log("page loaded");
         if (session.token == null) {
           await session.create("recycleconsumer@gia.fpx.se", "test");
         }
@@ -160,8 +156,17 @@
         const recycleCollection = collections.find(c => c.name == "fpx_recycle_consumer" && c.provider_uuid == session.user.provider_uuid);
         
         if (recycleCollection != null) {
-          this.recycleCollectionItems = await collection.fetchItems(recycleCollection.uuid);
-          this.recycleCollectionItems = this.recycleCollectionItems.filter(item => item.properties.start != null);
+          const recycleCollectionItems = await collection.fetchItems(recycleCollection.uuid);
+          this.bookedRuns = [];
+
+          for (const item of recycleCollectionItems) {
+            this.bookedRuns.push({
+              id: item.id,
+              title: this.dateToString(new Date(item.properties.start)) + " - Bokad hämtning",
+              text: item.properties.retriever,
+              status: item.properties.status
+            });
+          }
         }
       },
       onBookNewTap() {

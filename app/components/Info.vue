@@ -86,44 +86,30 @@
                 this.pantRetrievers.push(collector.properties.name);
             }
         },
-        roundToHour(date) {
-            const hourMs = 60 * 60 * 1000;
-            return new Date(Math.ceil(date.getTime() / hourMs) * hourMs);
-        },
-        dateToString(date) {
-            const str = `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-
-            return str;
-        },
         onContinue() {
             this.$navigateTo(App);
         },
         async onBookTap() {
             const coords = this.$store.state.selectedCoordinates;
-            const start = this.roundToHour(new Date());
-            const end = this.roundToHour(new Date());
+            const start = new Date();
+            const end = new Date();
             const hours = this.timeFrames[this.selectedTimeFrame];
             end.setTime(end.getTime() + (hours*60*60*1000));
 
-            const items = {
-                "type": "FeatureCollection",
-                "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [coords.lng, coords.lat]
-                        },
-                        "properties": {
-                            "property_type": this.propertyTypes[this.selectedPropertyType],
-                            "start": this.dateToString(start),
-                            "end": this.dateToString(end),
-                            "retriever": this.pantRetrievers[this.$refs.pantRetrieversDropDown.nativeView.selectedIndex],
-                            "floor_info": this.floorInfo,
-                            "other_info": this.otherInfo
-                        }
-                    }
-                ]
+            const item = {
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [coords.lng, coords.lat]
+                },
+                "properties": {
+                    "property_type": this.propertyTypes[this.selectedPropertyType],
+                    "start": start.toISOString(),
+                    "end": end.toISOString(),
+                    "retriever": this.pantRetrievers[this.$refs.pantRetrieversDropDown.nativeView.selectedIndex],
+                    "floor_info": this.floorInfo,
+                    "other_info": this.otherInfo,
+                    "status": "waiting"
+                }
             };
 
             console.log("creating session");
@@ -144,8 +130,8 @@
             }
 
             console.log("adding item to collection");
-            console.log("items:" + JSON.stringify(items))
-            await collection.createItems(recycleCollection.uuid, items);
+            console.log("item:" + JSON.stringify(item))
+            await collection.createItem(recycleCollection.uuid, item);
 
             this.showThankYou = true;
         },
