@@ -75,9 +75,9 @@ export default {
     return data;
   },
 
-  async addItems(collectionId, items) {
-    const response = await fetch(`${BASE_URL}/collections/${collectionId}/items`, {
-      method: 'PUT',
+  async createItems(collectionId, items) {
+    const response = await fetch(`${BASE_URL}/collections/${collectionId}/items/bulk`, {
+      method: 'POST',
       mode: 'cors',
       headers: {
         Authorization: `Bearer ${session.token}`,

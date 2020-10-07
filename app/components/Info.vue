@@ -132,19 +132,20 @@
             
             console.log("fetching collections by name");
             const collections = await collection.fetchCollections();
-            console.log("collections: " + collections);
+            console.log("collections: " + JSON.stringify(collections));
 
             let recycleCollection = collections.find(c => c.name == "fpx_recycle_consumer" && c.provider_uuid == session.user.provider_uuid);
-            console.log("recycleCollection: " + recycleCollection);
+            console.log("recycleCollection: " + JSON.stringify(recycleCollection));
 
             if (recycleCollection == null) {
                 console.log("creating new collection");
                 recycleCollection = await collection.create("fpx_recycle_consumer", false);
-                console.log("created collection: " + recycleCollection);
+                console.log("created collection: " + JSON.stringify(recycleCollection));
             }
 
             console.log("adding item to collection");
-            await collection.addItems(recycleCollection.uuid, items);
+            console.log("items:" + JSON.stringify(items))
+            await collection.createItems(recycleCollection.uuid, items);
 
             this.showThankYou = true;
         },
