@@ -22,10 +22,10 @@
                 </StackLayout>
               </GridLayout>
               <Label text="Dina bokade hämtningar" fontWeight="bold" fontSize="21" class="titleColor" marginTop="20" />
-              <GridLayout v-for="(item, index) in bookedRuns" :key="item.id" columns="*, auto" padding="10 15" margin="5 10" borderRadius="20" backgroundColor="white" androidElevation="12">
+              <GridLayout v-for="(item) in bookedRuns" :key="item.id" columns="*, auto" padding="10 15" margin="5 10" borderRadius="20" backgroundColor="white" androidElevation="12">
                 <StackLayout col=0>
                   <Label margin="2 0" textWrap="true" fontSize="18" class="bodyTextColor" fontWeight="bold">{{item.title}}</Label>
-                  <Label class="bodyTextColor" textWrap="true" margin="2 0" fontSize="18" fontStyle="italic">{{item.text}}</Label>
+                  <Label class="bodyTextColor" textWrap="true" margin="2 0" fontSize="18" fontStyle="italic">{{item.collector}}</Label>
                 </StackLayout>
                 <Image col="1" :src="statusImages[item.status]" stretch="fill" verticalAlignment="center" marginRight="15" width="30" height="30"/>
               </GridLayout>
@@ -58,35 +58,6 @@
       </ScrollView>
     </GridLayout>
   </Page>
-
-    <!--
-    <Page @loaded="onPageLoaded" actionBarHidden="true">
-        <GridLayout rows="auto, *, auto, *, auto, *, auto, *, auto, *, auto">
-          <StackLayout row="2">
-            <Label text="Hämtningar i ditt område" horizontalAlignment="center" fontWeight="bold"/>
-            <Label text="Onsdag 21/11 18:00-20:00 Gävle fotboll"/>
-            <Label text="Torsdag 22/11 18:00-20:00 Gävle Ridklubb"/>
-          </StackLayout>
-          <StackLayout row="4">
-            <Label text="Bokad hämtning" horizontalAlignment="center" fontWeight="bold"/>
-            <Label v-for="(item) in recycleCollectionItems" :key="item.uuid">
-              {{ item.properties.start }} - {{item.properties.end}} - {{item.properties.retriever}}
-            </Label>
-          </StackLayout>
-          <Label row="6" text="Du har donerat pant 10 gånger" horizontalAlignment="center" fontWeight="bold"/>
-          <StackLayout row="8">
-            <Label text="Kontakta oss:" horizontalAlignment="center"/>
-            <Label text="x@y.se" horizontalAlignment="center"/>
-          </StackLayout>
-          <StackLayout row="9" style="border-width: 2px; border-radius: 5px 5px 5px 5px; border-color: #c4c1c0;">
-            <Label text="Håll dig uppdaterad genom pushnotifikationer" fontWeight="bold" horizontalAlignment="center"/>
-            <Label textWrap="true" horizontalAlignment="center" text="Pushar är det snabbaste och smidigaste sättet att få information om när din pant hämtas och/eller när det finns annan panthämtning inbokad i ditt område."/>
-            <Button @onTap="onAllowNotificationsTap" text="Tillåt pushnotifikationer"/>
-          </StackLayout>
-          <Button @onTap="onBookNewTap" row="10" text="Boka ny hämtning"/>
-        </GridLayout>
-    </Page>
-    -->
 </template>
 
 <script>
@@ -102,26 +73,7 @@
           "confirmed": "~/assets/images/icon_pantr_on_way@3x.png",
           "done": "~/assets/images/icon_done@3x.png",
         },
-        bookedRuns: [
-          {
-            id:"a",
-            title: "2020-09-28 - Bokad hämtning",
-            text: "Gävle fotboll",
-            status: "waiting",
-          },
-          {
-            id:"b",
-            title: "2020-09-28 - Bokad hämtning",
-            text: "Gävle ridklubb",
-            status: "confirmed",
-          },
-          {
-            id:"c",
-            title: "2020-08-14 - Bokad hämtning",
-            text: "Gävle hockey",
-            status: "done",
-          },
-        ],
+        bookedRuns: [],
         pantRuns: [
           {
             id:1,
@@ -163,7 +115,7 @@
             this.bookedRuns.push({
               id: item.id,
               title: this.dateToString(new Date(item.properties.start)) + " - Bokad hämtning",
-              text: item.properties.retriever,
+              collector: item.properties.retriever,
               status: item.properties.status
             });
           }

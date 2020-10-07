@@ -30,15 +30,17 @@
               <Span text="panthämtare i området"/>
             </FormattedString>
           </Label>-->
-          <FlexboxLayout justifyContent="center" alignItems="center" androidElevation="12" background="white" borderRadius="20" width="80%" height="60" verticalAlignment="top" marginTop="90">
-            <Label v-if="!isFetchingCollectors" fontSize="18" class="bodyTextColor">
+          <FlexboxLayout v-show="!isFetchingCollectors" justifyContent="center" alignItems="center" androidElevation="12" background="white" borderRadius="20" width="80%" height="60" verticalAlignment="top" marginTop="90">
+            <Label fontSize="18" class="bodyTextColor">
               <FormattedString>
                 <Span text="Det finns"/>
                 <Span fontWeight="bold"> {{availableCollectors.length}} </Span>
                 <Span text="panthämtare i området"/>
               </FormattedString>
             </Label>
-            <Label v-if="isFetchingCollectors" text="Letar panthämtare..." fontSize="18" class="bodyTextColor"/>
+          </FlexboxLayout>
+          <FlexboxLayout v-show="isFetchingCollectors" justifyContent="center" alignItems="center" androidElevation="12" background="white" borderRadius="20" width="80%" height="60" verticalAlignment="top" marginTop="90">
+            <Label text="Letar panthämtare..." fontSize="18" class="bodyTextColor"/>
           </FlexboxLayout>
 
           <GridLayout v-if="showMapHelp" borderRadius="20" verticalAlignment="center" horizontalAlignment="center" background="white" androidElevation="12" margin="30" padding="30">
@@ -85,7 +87,8 @@
       return {
         showMapHelp: true,
         isFetchingCollectors: true,
-        availableCollectors: []
+        availableCollectors: [],
+        map: null
       }
     },
     methods: {
@@ -101,33 +104,38 @@
           this.$navigateTo(Info);
           //this.$showModal(ModalTest);
         },
-        onMapMove(event) {
-          console.log(JSON.stringify(event.event));
-        },
-        async onMapReady(args) {
+        async updateCollectors(lat, lng) {
           this.isFetchingCollectors = true;
-          let collectors = await collection.fetchItemsByNameWithin("pantr-collectors", {x: 17.1413864, y: 60.6746827}, 5000);
+          let collectors = await collection.fetchItemsByNameWithin("pantr-collectors", {x: lng, y: lat}, 5000);
           this.availableCollectors = collectors;
           this.$store.state.availableCollectors = this.availableCollectors;
-          this.isFetchingCollectors = false;
           console.log(collectors);
+          this.map.removeMarkers();
           for (let collector of collectors) {
             console.log(collector);
-            args.map.addMarkers([
+            this.map.addMarkers([
               {
                 lat: collector.geometry.coordinates[1],
                 lng: collector.geometry.coordinates[0],
-                title: "Gävle, SE",
-                subtitle: "Noice",
-                onCalloutTap: () => {
-                  utils.openUrl("https://fpx.se/");
-                }
+                title: collector.properties.name
               }
             ]);
           }
+          this.isFetchingCollectors = false;
+        },
+        async onMapMove(event) {
+          console.log(JSON.stringify(event.event));
+
+          if (event.event.type == "moveEnd") {
+            await this.updateCollectors(event.event.lat, event.event.lng);
+          }
+        },
+        async onMapReady(args) {
+          this.map = args.map;
+          await this.updateCollectors(17.1413864, 60.6746827);
+        }
       }
     }
-  }
 </script>
 
 <style scoped>
