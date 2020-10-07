@@ -1,4 +1,4 @@
-const BASE_URL = "http://dev.gia.fpx.se/api/v1";
+const BASE_URL = "http://176.10.162.24/api/v1";
 
 export default {
   token: null,

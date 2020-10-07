@@ -99,7 +99,7 @@
             this.$navigateTo(App);
         },
         async onBookTap() {
-            /*const coords = this.$store.state.selectedCoordinates;
+            const coords = this.$store.state.selectedCoordinates;
             const start = this.roundToHour(new Date());
             const end = this.roundToHour(new Date());
             const hours = this.timeFrames[this.selectedTimeFrame];
@@ -144,7 +144,7 @@
             }
 
             console.log("adding item to collection");
-            await collection.addItems(recycleCollection.uuid, items);*/
+            await collection.addItems(recycleCollection.uuid, items);
 
             this.showThankYou = true;
         },
