@@ -1,5 +1,5 @@
 <template>
-    <Page actionBarHidden="true" background="#f2f2f2">
+    <Page @loaded="onPageLoaded" actionBarHidden="true" background="#f2f2f2">
         <GridLayout>
             <ScrollView>
                 <GridLayout rows="auto, *, auto" padding="0 20">
@@ -68,7 +68,7 @@
       return {
         selectedPropertyType: 0,
         selectedTimeFrame: 4,
-        pantRetrievers: ["Alla tillgängliga", "Gävle Ridklubb 1km"],
+        pantRetrievers: [],
         selectedPantRetriever: 0,
         floorInfo: null,
         otherInfo: null,
@@ -79,6 +79,13 @@
       }
     },
     methods: {
+        onPageLoaded() {
+            this.pantRetrievers.push("Alla tillgängliga");
+
+            for (const collector of this.$store.state.availableCollectors) {
+                this.pantRetrievers.push(collector.properties.name);
+            }
+        },
         roundToHour(date) {
             const hourMs = 60 * 60 * 1000;
             return new Date(Math.ceil(date.getTime() / hourMs) * hourMs);

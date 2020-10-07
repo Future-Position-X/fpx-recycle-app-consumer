@@ -105,8 +105,10 @@
           console.log(JSON.stringify(event.event));
         },
         async onMapReady(args) {
+          this.isFetchingCollectors = true;
           let collectors = await collection.fetchItemsByNameWithin("pantr-collectors", {x: 17.1413864, y: 60.6746827}, 5000);
           this.availableCollectors = collectors;
+          this.$store.state.availableCollectors = this.availableCollectors;
           this.isFetchingCollectors = false;
           console.log(collectors);
           for (let collector of collectors) {
