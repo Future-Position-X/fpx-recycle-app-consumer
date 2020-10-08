@@ -66,21 +66,7 @@
   import Info from './Info'
   import * as utils from "utils/utils";
   import collection from "../services/collection";
-
-  const ModalTest = {
-    template: `
-    <GridLayout borderRadius="20">
-      <StackLayout>
-        <Image src="~/assets/images/icon_can@3x.png" stretch="none" horizontalAlignment="center" />
-        <Label text="Välkommen!" fontWeight="bold" fontSize="45" class="primaryTextColor" />
-        <Label class="primaryTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
-                text="Med hjälp av denna tjänst kan du enkelt skänka din pant till lokala föreningar och skolor."/>
-        <Label class="primaryTextColor" textWrap="true" marginTop="17" lineHeight="3" fontSize="18"
-                text="Panten hämtas där du bor, och du slipper allt besvär med att själv transportera och panta den, pengarna går oavkortat till den som hämtar den."/>
-      </StackLayout>
-    </GridLayout>
-    `
-  };
+  const appSettings = require("tns-core-modules/application-settings");
 
   export default {
     data() {
@@ -102,6 +88,8 @@
         async onBook() {
           const center = await this.$refs.map.nativeView.getCenter();
           this.$store.state.selectedCoordinates = center;
+          appSettings.setNumber("center_lng", center.lng);
+          appSettings.setNumber("center_lat", center.lat);
           this.$navigateTo(Info);
         },
         async onRetrievePositionTap() {
@@ -152,9 +140,30 @@
             await this.updateCollectors(event.event.lat, event.event.lng);
           }
         },
+        sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        },
         async onMapReady(args) {
           this.map = args.map;
-          await this.updateCollectors(17.1413864, 60.6746827);
+          let centerLng = appSettings.getNumber("center_lng");
+          let centerLat = appSettings.getNumber("center_lat");
+          let zoom = true;
+
+          if (centerLng == null || centerLat == null) {
+            centerLng = 17.1413864;
+            centerLat = 60.6746827;
+            zoom = false;
+          }
+
+          if (zoom) {
+            await this.sleep(1000);
+            await this.map.setZoomLevel({
+              level: 16,
+              animate: true
+            });
+          }
+
+          await this.updateCollectors(centerLng, centerLat);
         }
       }
     }
