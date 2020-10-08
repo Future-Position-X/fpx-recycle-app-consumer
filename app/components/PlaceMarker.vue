@@ -9,7 +9,7 @@
               longitude="17.14024985657789"
               hideCompass="true"
               zoomLevel="4"
-              showUserLocation="false"
+              showUserLocation="true"
               disableZoom="false"
               disableRotation="false"
               disableScroll="false"
@@ -88,7 +88,8 @@
         showMapHelp: true,
         isFetchingCollectors: true,
         availableCollectors: [],
-        map: null
+        map: null,
+        zoomLevel: 4.0
       }
     },
     methods: {
@@ -103,9 +104,27 @@
           this.$store.state.selectedCoordinates = center;
           this.$navigateTo(Info);
         },
-        onRetrievePositionTap() {
-          this.$navigateTo(Info);
-          //this.$showModal(ModalTest);
+        async onRetrievePositionTap() {
+          let location;
+
+          this.showMapHelp = false;
+
+          try {
+            location = await this.map.getUserLocation();
+          } catch (err) {
+            console.log("retrieve pos error: ", err);
+            return;
+          }
+
+          await this.map.setCenter({
+            lat: location.location.lat,
+            lng: location.location.lng,
+            animated: true
+          });
+
+          await this.map.setZoomLevel({
+            level: 16
+          });
         },
         async updateCollectors(lat, lng) {
           this.isFetchingCollectors = true;
