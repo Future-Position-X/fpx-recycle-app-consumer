@@ -21,7 +21,7 @@
           <!--<Button row="0" @onTap="onRetrievePositionTap" text="Hämta min position" horizontalAlignment="right" verticalAlignment="top"/>-->
           <Image src="~/assets/images/dots.png" stretch="fill" horizontalAlignment="left" verticalAlignment="top" marginTop="30" marginLeft="25" width="25" height="25"/>
           <Image src="~/assets/images/Pantr_logo@3x.png" stretch="fill" horizontalAlignment="center" verticalAlignment="top" width="150" height="35" marginTop="25"/>
-          <Image src="~/assets/images/icon_help@3x.png" stretch="fill" horizontalAlignment="right" verticalAlignment="top" marginTop="30" marginRight="25" width="25" height="25"/>
+          <Image src="~/assets/images/icon_help@3x.png" @onTap="onHelpTap" stretch="fill" horizontalAlignment="right" verticalAlignment="top" marginTop="30" marginRight="25" width="25" height="25"/>
           <Button @onTap="onBook" text="Boka hämtning" verticalAlignment="bottom" horizontalAlignment="bottom" marginBottom="39" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21"/>
           <!--<Label class="primaryTextColor" textAlignment="center" padding="5" textWrap="true" marginTop="150" lineHeight="3" fontSize="18" background="white" borderRadius="20" width="80%" height="50" verticalAlignment="top">
             <FormattedString>
@@ -92,6 +92,9 @@
       }
     },
     methods: {
+        onHelpTap() {
+          this.showMapHelp = true;
+        },
         onDismissHelp() {
           this.showMapHelp = false;
         },
