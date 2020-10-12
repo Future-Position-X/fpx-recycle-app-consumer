@@ -141,7 +141,8 @@
           console.log(event.event);
 
           if (event && event.event && event.event.type == "moveEnd") {
-            await this.updateCollectors(event.event.lat, event.event.lng);
+            const debounced = debounce(this.updateCollectors, 500);
+            await debounced(event.event.lat, event.event.lng);
           }
         },
         sleep(ms) {
