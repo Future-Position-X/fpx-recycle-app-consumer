@@ -134,9 +134,13 @@
           this.isFetchingCollectors = false;
         },
         async onMapMove(event) {
-          console.log(JSON.stringify(event.event));
+          // for (let key of Object.keys(event.map.mapbox)) {
+          //   console.log(key);
+          // }
+          //console.log(event);
+          console.log(event.event);
 
-          if (event.event.type == "moveEnd") {
+          if (event && event.event && event.event.type == "moveEnd") {
             await this.updateCollectors(event.event.lat, event.event.lng);
           }
         },
