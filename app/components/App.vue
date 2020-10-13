@@ -1,13 +1,14 @@
 <template>
   <Page @loaded="onPageLoaded" actionBarHidden="true" background="#f2f2f2">
     <GridLayout>
+      <ActivityIndicator v-if="isFetchingData" verticalAlignment="center" busy="true"/>
       <ScrollView>
-        <GridLayout rows="auto, *" padding="0 0">
+        <GridLayout minHeight="500" rows="*,*" padding="0 0">
           <Image row="0" src="~/assets/images/dots.png" stretch="fill" horizontalAlignment="left" verticalAlignment="top" marginTop="30" marginLeft="25" width="25" height="25"/>
           <Image row="0" src="~/assets/images/Pantr_logo@3x.png" stretch="fill" horizontalAlignment="center" verticalAlignment="top" width="150" height="35" marginTop="25"/>
           <Image row="0" src="~/assets/images/icon_help@3x.png" stretch="fill" horizontalAlignment="right" verticalAlignment="top" marginTop="30" marginRight="25" width="25" height="25"/>
-          <ActivityIndicator row="1" verticalAlignment="center" v-show="isFetchingData" busy="true"/>
-          <StackLayout v-show="!isFetchingData" row="1" marginTop="18">
+          
+          <StackLayout v-if="!isFetchingData" row="1" marginTop="18">
             <StackLayout marginTop="3" padding="0" margin="0 10">
               <Label text="Hämtningar i ditt område" fontWeight="bold" fontSize="21" class="titleColor" />
               <GridLayout v-for="(item, index) in pantRuns" :key="item.id" columns="auto,*" borderBottomColor="#ddd" :borderBottomWidth="index == pantRuns.length - 1 ? 0 : 1" padding="10 0" margin="0 10">
