@@ -14,8 +14,7 @@
               disableRotation="false"
               disableScroll="false"
               disableTilt="false"
-              @mapReady="onMapReady($event)"
-              @moveBeginEvent="onMapMove($event)">
+              @mapReady="onMapReady($event)">
           </Mapbox>
           <Image src="~/assets/images/icon_mapmark_onmap@3x.png" stretch="none" horizontalAlignment="center" verticalAlignment="center" marginBottom="87" />
           <!--<Button row="0" @onTap="onRetrievePositionTap" text="Hämta min position" horizontalAlignment="right" verticalAlignment="top"/>-->
@@ -77,7 +76,8 @@
         isFetchingCollectors: true,
         availableCollectors: [],
         map: null,
-        zoomLevel: 4.0
+        zoomLevel: 4.0,
+        debouncedUpdateCollectors: null
       }
     },
     methods: {
@@ -135,27 +135,25 @@
           }
           this.isFetchingCollectors = false;
         },
-        async onMapMove(event) {
-          // for (let key of Object.keys(event.map.mapbox)) {
-          //   console.log(key);
-          // }
-          //console.log(event);
-          console.log(event.event);
-
-          if (event && event.event && event.event.type == "moveEnd") {
-            this.isFetchingCollectors = true;
-            const debounced = debounce(this.updateCollectors, 500);
-            await debounced(event.event.lat, event.event.lng);
-          }
-        },
         sleep(ms) {
           return new Promise(resolve => setTimeout(resolve, ms));
+        },
+        async onMapScroll(point) {
+          this.isFetchingCollectors = true;
+
+          if (this.debouncedUpdateCollectors == null) {
+            this.debouncedUpdateCollectors = debounce(this.updateCollectors, 500);
+          }
+
+          await this.debouncedUpdateCollectors(point.lat, point.lng);
         },
         async onMapReady(args) {
           this.map = args.map;
           let centerLng = appSettings.getNumber("center_lng");
           let centerLat = appSettings.getNumber("center_lat");
           let zoom = true;
+
+          this.map.setOnScrollListener(this.onMapScroll);
 
           if (centerLng == null || centerLat == null) {
             centerLng = 17.1413864;
