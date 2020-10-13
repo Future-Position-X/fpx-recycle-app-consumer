@@ -41,6 +41,7 @@
           </FlexboxLayout>
           <FlexboxLayout v-show="isFetchingCollectors" justifyContent="center" alignItems="center" androidElevation="12" background="white" borderRadius="20" width="80%" height="60" verticalAlignment="top" marginTop="90">
             <Label text="Letar panthämtare..." fontSize="18" class="bodyTextColor"/>
+            <ActivityIndicator :busy="isFetchingCollectors" marginLeft="10"/>
           </FlexboxLayout>
 
           <GridLayout v-if="showMapHelp" borderRadius="20" verticalAlignment="center" horizontalAlignment="center" background="white" androidElevation="12" margin="30" padding="30">
@@ -66,6 +67,7 @@
   import Info from './Info'
   import * as utils from "utils/utils";
   import collection from "../services/collection";
+  import debounce from 'debounce-async';
   const appSettings = require("tns-core-modules/application-settings");
 
   export default {
@@ -141,6 +143,7 @@
           console.log(event.event);
 
           if (event && event.event && event.event.type == "moveEnd") {
+            this.isFetchingCollectors = true;
             const debounced = debounce(this.updateCollectors, 500);
             await debounced(event.event.lat, event.event.lng);
           }

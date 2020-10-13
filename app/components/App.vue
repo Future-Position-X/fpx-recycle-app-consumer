@@ -6,7 +6,8 @@
           <Image row="0" src="~/assets/images/dots.png" stretch="fill" horizontalAlignment="left" verticalAlignment="top" marginTop="30" marginLeft="25" width="25" height="25"/>
           <Image row="0" src="~/assets/images/Pantr_logo@3x.png" stretch="fill" horizontalAlignment="center" verticalAlignment="top" width="150" height="35" marginTop="25"/>
           <Image row="0" src="~/assets/images/icon_help@3x.png" stretch="fill" horizontalAlignment="right" verticalAlignment="top" marginTop="30" marginRight="25" width="25" height="25"/>
-          <StackLayout row="1" marginTop="18">
+          <ActivityIndicator row="1" verticalAlignment="center" v-show="isFetchingData" busy="true"/>
+          <StackLayout v-show="!isFetchingData" row="1" marginTop="18">
             <StackLayout marginTop="3" padding="0" margin="0 10">
               <Label text="Hämtningar i ditt område" fontWeight="bold" fontSize="21" class="titleColor" />
               <GridLayout v-for="(item, index) in pantRuns" :key="item.id" columns="auto,*" borderBottomColor="#ddd" :borderBottomWidth="index == pantRuns.length - 1 ? 0 : 1" padding="10 0" margin="0 10">
@@ -53,7 +54,7 @@
 
               <Button @onTap="onBookNewTap" text="Boka ny hämtning" marginTop="20" marginBottom="40" textTransform="none" background="#1f2d40" color="white" borderRadius="40" width="60%" height="57" fontSize="21" class="bodyTextColor"/>
             </StackLayout>
-            </StackLayout>
+          </StackLayout>
         </GridLayout>
       </ScrollView>
     </GridLayout>
@@ -68,6 +69,7 @@
   export default {
     data() {
       return {
+        isFetchingData: false,
         statusImages: {
           "waiting": "~/assets/images/icon_delete@3x.png",
           "confirmed": "~/assets/images/icon_pantr_on_way@3x.png",
@@ -100,6 +102,8 @@
       },
       async onPageLoaded() {
         console.log("page loaded");
+        this.isFetchingData = true;
+
         if (session.token == null) {
           await session.create("recycleconsumer@gia.fpx.se", "test");
         }
@@ -120,6 +124,8 @@
             });
           }
         }
+
+        this.isFetchingData = false;
       },
       onBookNewTap() {
         this.$navigateTo(PlaceMarker);
