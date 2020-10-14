@@ -63,6 +63,7 @@
 </template>
 
 <script>
+  /* global PRODUCERS_COLLECTION_NAME */
   import Info from './Info'
   import * as utils from "utils/utils";
   import collection from "../services/collection";
@@ -118,7 +119,7 @@
         },
         async updateCollectors(lat, lng) {
           this.isFetchingCollectors = true;
-          let collectors = await collection.fetchItemsByNameWithin("pantr-collectors", {x: lng, y: lat}, 5000);
+          let collectors = await collection.fetchItemsByNameWithin(PRODUCERS_COLLECTION_NAME, {x: lng, y: lat}, 5000);
           this.availableCollectors = collectors;
           this.$store.state.availableCollectors = this.availableCollectors;
           console.log(collectors);

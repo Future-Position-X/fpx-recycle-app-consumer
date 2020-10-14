@@ -58,6 +58,7 @@
 </template>
 
 <script>
+  /* global CONSUMERS_COLLECTION_NAME */
   import PlaceMarker from './PlaceMarker'
   import session from '../services/session'
   import collection from '../services/collection'
@@ -120,12 +121,12 @@
             const collections = await collection.fetchCollections();
             console.log("collections: " + JSON.stringify(collections));
 
-            let recycleCollection = collections.find(c => c.name == "fpx_recycle_consumer" && c.provider_uuid == session.user.provider_uuid);
+            let recycleCollection = collections.find(c => c.name === CONSUMERS_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
             console.log("recycleCollection: " + JSON.stringify(recycleCollection));
 
             if (recycleCollection == null) {
                 console.log("creating new collection");
-                recycleCollection = await collection.create("fpx_recycle_consumer", false);
+                recycleCollection = await collection.create(CONSUMERS_COLLECTION_NAME, false);
                 console.log("created collection: " + JSON.stringify(recycleCollection));
             }
 

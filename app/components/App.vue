@@ -63,6 +63,7 @@
 </template>
 
 <script>
+  /* global CONSUMERS_COLLECTION_NAME */
   import PlaceMarker from './PlaceMarker'
   import session from '../services/session'
   import collection from '../services/collection'
@@ -110,7 +111,7 @@
         }
         
         const collections = await collection.fetchCollections();
-        const recycleCollection = collections.find(c => c.name == "fpx_recycle_consumer" && c.provider_uuid == session.user.provider_uuid);
+        const recycleCollection = collections.find(c => c.name === CONSUMERS_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
         
         if (recycleCollection != null) {
           const recycleCollectionItems = await collection.fetchItems(recycleCollection.uuid);
