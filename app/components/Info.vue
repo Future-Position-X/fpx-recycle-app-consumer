@@ -58,12 +58,12 @@
 </template>
 
 <script>
-  /* global CONSUMERS_COLLECTION_NAME */
   import PlaceMarker from './PlaceMarker'
   import session from '../services/session'
   import collection from '../services/collection'
   import App from './App'
- 
+  import config from "../config";
+  import {Booking, BookingStatus, PropertyType} from "../models";
   export default {
     data() {
       return {
@@ -75,7 +75,7 @@
         otherInfo: null,
         showThankYou: false,
 
-        propertyTypes: ["Villa", "Lägenhet"],
+        propertyTypes: [PropertyType.HOUSE, PropertyType.APARTMENT],
         timeFrames: [12, 24, 48, 72]
       }
     },
@@ -97,21 +97,15 @@
             const hours = this.timeFrames[this.selectedTimeFrame];
             end.setTime(end.getTime() + (hours*60*60*1000));
 
-            const item = {
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [coords.lng, coords.lat]
-                },
-                "properties": {
-                    "property_type": this.propertyTypes[this.selectedPropertyType],
-                    "start": start.toISOString(),
-                    "end": end.toISOString(),
-                    "retriever": this.pantRetrievers[this.$refs.pantRetrieversDropDown.nativeView.selectedIndex],
-                    "floor_info": this.floorInfo,
-                    "other_info": this.otherInfo,
-                    "status": "waiting"
-                }
-            };
+            const booking = new Booking();
+            booking.coordinates = [coords.lng, coords.lat];
+            booking.property_type = this.propertyTypes[this.selectedPropertyType];
+            booking.start = start.toISOString()
+            booking.end = end.toISOString()
+            booking.retriever_uuid = this.pantRetrievers[this.$refs.pantRetrieversDropDown.nativeView.selectedIndex].uuid
+            booking.floor_info = this.floorInfo
+            booking.other_info = this.otherInfo
+            booking.status = BookingStatus.WAITING;
 
             console.log("creating session");
             await session.create("recycleconsumer@gia.fpx.se", "test");
@@ -121,18 +115,18 @@
             const collections = await collection.fetchCollections();
             console.log("collections: " + JSON.stringify(collections));
 
-            let recycleCollection = collections.find(c => c.name === CONSUMERS_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
+            let recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
             console.log("recycleCollection: " + JSON.stringify(recycleCollection));
 
             if (recycleCollection == null) {
                 console.log("creating new collection");
-                recycleCollection = await collection.create(CONSUMERS_COLLECTION_NAME, false);
+                recycleCollection = await collection.create(config.BOOKING_COLLECTION_NAME, false);
                 console.log("created collection: " + JSON.stringify(recycleCollection));
             }
 
             console.log("adding item to collection");
-            console.log("item:" + JSON.stringify(item))
-            await collection.createItem(recycleCollection.uuid, item);
+            console.log("item:" + JSON.stringify(booking.to_item()))
+            await collection.createItem(recycleCollection.uuid, booking.to_item());
 
             this.showThankYou = true;
         },

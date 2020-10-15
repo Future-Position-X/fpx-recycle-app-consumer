@@ -63,13 +63,12 @@
 </template>
 
 <script>
-  /* global PRODUCERS_COLLECTION_NAME */
   import Info from './Info'
   import * as utils from "utils/utils";
   import collection from "../services/collection";
   import debounce from 'debounce-async';
+  import config from "../config";
   const appSettings = require("tns-core-modules/application-settings");
-
   export default {
     data() {
       return {
@@ -119,7 +118,7 @@
         },
         async updateCollectors(lat, lng) {
           this.isFetchingCollectors = true;
-          let collectors = await collection.fetchItemsByNameWithin(PRODUCERS_COLLECTION_NAME, {x: lng, y: lat}, 5000);
+          let collectors = await collection.fetchItemsByNameWithin(config.RETRIEVER_COLLECTION_NAME, {x: lng, y: lat}, 5000);
           this.availableCollectors = collectors;
           this.$store.state.availableCollectors = this.availableCollectors;
           console.log(collectors);

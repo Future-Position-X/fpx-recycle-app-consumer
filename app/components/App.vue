@@ -63,20 +63,25 @@
 </template>
 
 <script>
-  /* global CONSUMERS_COLLECTION_NAME */
   import PlaceMarker from './PlaceMarker'
   import session from '../services/session'
   import collection from '../services/collection'
+  import config from "../config";
+  import {Booking, BookingStatus} from "../models";
+
+  const getStatusImages = function() {
+    const statusImages = {};
+    statusImages[BookingStatus.WAITING] = "~/assets/images/icon_delete@3x.png";
+    statusImages[BookingStatus.CONFIRMED] = "~/assets/images/icon_pantr_on_way@3x.png";
+    statusImages[BookingStatus.DONE] = "~/assets/images/icon_done@3x.png";
+    return statusImages;
+  };
 
   export default {
     data() {
       return {
         isFetchingData: false,
-        statusImages: {
-          "waiting": "~/assets/images/icon_delete@3x.png",
-          "confirmed": "~/assets/images/icon_pantr_on_way@3x.png",
-          "done": "~/assets/images/icon_done@3x.png",
-        },
+        statusImages:  getStatusImages(),
         bookedRuns: [],
         pantRuns: [
           {
@@ -111,18 +116,20 @@
         }
         
         const collections = await collection.fetchCollections();
-        const recycleCollection = collections.find(c => c.name === CONSUMERS_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
-        
+        const recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
+        console.log("gg")
         if (recycleCollection != null) {
           const recycleCollectionItems = await collection.fetchItems(recycleCollection.uuid);
           this.bookedRuns = [];
-
+          console.log("gg2", JSON.stringify(recycleCollectionItems))
           for (const item of recycleCollectionItems) {
+            const booking = Booking.from_item(item);
+            console.log("gg3", JSON.stringify(booking.to_item()))
             this.bookedRuns.push({
-              id: item.id,
-              title: this.dateToString(new Date(item.properties.start)) + " - Bokad hämtning",
-              collector: item.properties.retriever,
-              status: item.properties.status
+              id: booking.uuid,
+              title: this.dateToString(new Date(booking.start)) + " - Bokad hämtning",
+              collector: booking.retriever_uuid,
+              status: booking.status
             });
           }
         }
