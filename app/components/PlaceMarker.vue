@@ -33,7 +33,7 @@
             <Label fontSize="18" class="bodyTextColor">
               <FormattedString>
                 <Span text="Det finns"/>
-                <Span fontWeight="bold"> {{availableCollectors.length}} </Span>
+                <Span fontWeight="bold"> {{ availableRetrievers.length }} </Span>
                 <Span text="panthämtare i området"/>
               </FormattedString>
             </Label>
@@ -68,13 +68,14 @@
   import collection from "../services/collection";
   import debounce from 'debounce-async';
   import config from "../config";
+  import {Retriever} from "../models";
   const appSettings = require("tns-core-modules/application-settings");
   export default {
     data() {
       return {
         showMapHelp: true,
         isFetchingCollectors: true,
-        availableCollectors: [],
+        availableRetrievers: [],
         map: null,
         zoomLevel: 4.0,
         debouncedUpdateCollectors: null
@@ -118,18 +119,18 @@
         },
         async updateCollectors(lat, lng) {
           this.isFetchingCollectors = true;
-          let collectors = await collection.fetchItemsByNameWithin(config.RETRIEVER_COLLECTION_NAME, {x: lng, y: lat}, 5000);
-          this.availableCollectors = collectors;
-          this.$store.state.availableCollectors = this.availableCollectors;
-          console.log(collectors);
+          let retrievers = (await collection.fetchItemsByNameWithin(config.RETRIEVER_COLLECTION_NAME, {x: lng, y: lat}, 5000)).map((i) => Retriever.from_item(i));
+          this.availableRetrievers = retrievers;
+          this.$store.state.availableRetrievers = this.availableRetrievers;
+          console.log(retrievers);
           this.map.removeMarkers();
-          for (let collector of collectors) {
-            console.log(collector);
+          for (let retriever of retrievers) {
+            console.log(retriever);
             this.map.addMarkers([
               {
-                lat: collector.geometry.coordinates[1],
-                lng: collector.geometry.coordinates[0],
-                title: collector.properties.name
+                lat: retriever.coordinates[1],
+                lng: retriever.coordinates[0],
+                title: retriever.name
               }
             ]);
           }

@@ -117,14 +117,11 @@
         
         const collections = await collection.fetchCollections();
         const recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
-        console.log("gg")
         if (recycleCollection != null) {
           const recycleCollectionItems = await collection.fetchItems(recycleCollection.uuid);
           this.bookedRuns = [];
-          console.log("gg2", JSON.stringify(recycleCollectionItems))
           for (const item of recycleCollectionItems) {
             const booking = Booking.from_item(item);
-            console.log("gg3", JSON.stringify(booking.to_item()))
             this.bookedRuns.push({
               id: booking.uuid,
               title: this.dateToString(new Date(booking.start)) + " - Bokad hämtning",

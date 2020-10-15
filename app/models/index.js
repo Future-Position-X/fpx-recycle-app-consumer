@@ -1,5 +1,15 @@
 class Retriever {
-  pantr_name
+  uuid;
+  coordinates;
+  name;
+  static from_item(item) {
+    let retriever = new Retriever();
+    retriever.uuid = item.uuid;
+    retriever.coordinates = item.geometry.coordinates;
+    retriever.name = item.properties.pantr_name;
+    return retriever;
+  }
+
 }
 
 const PropertyType = {
