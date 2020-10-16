@@ -67,7 +67,7 @@
   import session from '../services/session'
   import collection from '../services/collection'
   import config from "../config";
-  import {Booking, BookingStatus} from "../models";
+  import {Booking, BookingStatus, Retriever} from "../models";
 
   const getStatusImages = function() {
     const statusImages = {};
@@ -118,14 +118,23 @@
         const collections = await collection.fetchCollections();
         const recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
         if (recycleCollection != null) {
-          const recycleCollectionItems = await collection.fetchItems(recycleCollection.uuid);
+          const bookings = (await collection.fetchItems(recycleCollection.uuid)).map((i) => Booking.from_item(i));
+
+          let retrievers = {}
+          // This should probably be done with one request where one could send multiple item uuids, like collection_uuids
+          for(const booking of bookings) {
+            const item = await collection.fetchItem(booking.retriever_uuid);
+            const retriever = Retriever.from_item(item);
+            retrievers[retriever.uuid] = retriever;
+          }
+
+
           this.bookedRuns = [];
-          for (const item of recycleCollectionItems) {
-            const booking = Booking.from_item(item);
+          for (const booking of bookings) {
             this.bookedRuns.push({
               id: booking.uuid,
               title: this.dateToString(new Date(booking.start)) + " - Bokad hämtning",
-              collector: booking.retriever_uuid,
+              collector: retrievers[booking.retriever_uuid].name,
               status: booking.status
             });
           }

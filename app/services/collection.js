@@ -54,6 +54,26 @@ export default {
     return data;
   },
 
+  async fetchItem(itemId) {
+    const headers = {
+      Accept: `application/json`,
+    };
+
+    if (session.authenticated()) headers.Authorization = `Bearer ${session.token}`;
+
+    const response = await fetch(
+      `${config.SERVICE_URL}/items/${itemId}`,
+      {
+        headers,
+      }
+    );
+
+    await this.validateResponse(response);
+
+    const data = await response.json();
+    return data;
+  },
+
   async fetchItemsByNameWithin(collectionName, point, distance) {
     const headers = {
       Accept: `application/json`,
@@ -61,7 +81,6 @@ export default {
 
     if (session.authenticated()) headers.Authorization = `Bearer ${session.token}`;
 
-    console.log("YOLO")
     const response = await fetch(
       `${config.SERVICE_URL}/collections/by_name/${collectionName}/items?limit=100000&spatial_filter=within-distance&spatial_filter.distance.x=${point.x}&spatial_filter.distance.y=${point.y}&spatial_filter.distance.d=${distance}`,
       {
