@@ -53,7 +53,7 @@
             </GridLayout>
             <Label v-if="selectedPropertyType == 1" text="Vilken trappa och våning?" fontWeight="bold" fontSize="18"
                    class="titleColor" marginTop="22"/>
-            <TextView marginTop="10" background="white" height="55" borderRadius="30" borderWidth="1"
+            <TextView v-if="selectedPropertyType == 1" marginTop="10" background="white" height="55" borderRadius="30" borderWidth="1"
                       borderColor="#e7e7e8"/>
             <Label text="Övrig information" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22"/>
             <TextView marginTop="10" background="white" height="55" borderRadius="30" borderWidth="1"
