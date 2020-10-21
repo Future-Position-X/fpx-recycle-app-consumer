@@ -69,6 +69,7 @@
   import config from "../config";
   import {Booking, BookingStatus, Confirmation, Retriever} from "../models";
   const application = require('tns-core-modules/application');
+  const timer = require('tns-core-modules/timer');
 
   const getStatusImages = function() {
     const statusImages = {};
@@ -100,7 +101,9 @@
             time: "Onsdag 21/11 18:00-20:00",
             collector: "Gävle hockey",
           },
-        ]
+        ],
+        recycleCollection: null,
+        updateIntervalId: 0
       }
     },
     methods: {
@@ -126,54 +129,61 @@
         }
         
         const collections = await collection.fetchCollections();
-        const recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
-        if (recycleCollection != null) {
-          let bookings = (await collection.fetchItems(recycleCollection.uuid)).map((i) => Booking.from_item(i));
-          const confirmations = (await collection.fetchItemsByName(config.CONFIRMATION_COLLECTION_NAME)).map((i) => Confirmation.from_item(i));
+        this.recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
+        await this.updateBookings();
+        this.isFetchingData = false;
+        this.updateIntervalId = timer.setInterval(this.update, 30000);
+      },
+      async update() {
+        this.isFetchingData = true;
+        await this.updateBookings();
+        this.isFetchingData = false;
+      },
+      async updateBookings()
+      {
+        let bookings = (await collection.fetchItems(this.recycleCollection.uuid)).map((i) => Booking.from_item(i));
+        const confirmations = (await collection.fetchItemsByName(config.CONFIRMATION_COLLECTION_NAME)).map((i) => Confirmation.from_item(i));
 
-          const confirmations_by_booking = confirmations.reduce((acc, c) => {
-            if(acc[c.booking_uuid]) {
-              acc[c.booking_uuid].push(c);
-            } else {
-              acc[c.booking_uuid] = [c];
-            }
-            acc[c.booking_uuid].sort((a, b) => (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime())
-            return acc;
-          }, {});
-
-
-          const new_confirmed_bookings = bookings.filter((b) => b.status == BookingStatus.WAITING && confirmations_by_booking[b.uuid]);
-          if(new_confirmed_bookings.length > 0) {
-            for(const new_confirmed_booking of new_confirmed_bookings) {
-              new_confirmed_booking.retriever_uuid = confirmations_by_booking[new_confirmed_booking.uuid][0].retriever_uuid;
-              new_confirmed_booking.status = BookingStatus.CONFIRMED;
-              await collection.updateItem(new_confirmed_booking.uuid, new_confirmed_booking.to_item())
-            }
-            bookings = (await collection.fetchItems(recycleCollection.uuid)).map((i) => Booking.from_item(i));
+        const confirmations_by_booking = confirmations.reduce((acc, c) => {
+          if(acc[c.booking_uuid]) {
+            acc[c.booking_uuid].push(c);
+          } else {
+            acc[c.booking_uuid] = [c];
           }
+          acc[c.booking_uuid].sort((a, b) => (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime())
+          return acc;
+        }, {});
 
 
-          let retrievers = {}
-          // This should probably be done with one request where one could send multiple item uuids, like collection_uuids
-          for(const booking of bookings) {
-            const item = await collection.fetchItem(booking.retriever_uuid);
-            const retriever = Retriever.from_item(item);
-            retrievers[retriever.uuid] = retriever;
+        const new_confirmed_bookings = bookings.filter((b) => b.status == BookingStatus.WAITING && confirmations_by_booking[b.uuid]);
+        if(new_confirmed_bookings.length > 0) {
+          for(const new_confirmed_booking of new_confirmed_bookings) {
+            new_confirmed_booking.retriever_uuid = confirmations_by_booking[new_confirmed_booking.uuid][0].retriever_uuid;
+            new_confirmed_booking.status = BookingStatus.CONFIRMED;
+            await collection.updateItem(new_confirmed_booking.uuid, new_confirmed_booking.to_item())
           }
-
-
-          this.bookedRuns = [];
-          for (const booking of bookings) {
-            this.bookedRuns.push({
-              id: booking.uuid,
-              title: this.dateToString(new Date(booking.start)) + " - Bokad hämtning",
-              collector: retrievers[booking.retriever_uuid].name,
-              status: booking.status
-            });
-          }
+          bookings = (await collection.fetchItems(this.recycleCollection.uuid)).map((i) => Booking.from_item(i));
         }
 
-        this.isFetchingData = false;
+
+        let retrievers = {}
+        // This should probably be done with one request where one could send multiple item uuids, like collection_uuids
+        for(const booking of bookings) {
+          const item = await collection.fetchItem(booking.retriever_uuid);
+          const retriever = Retriever.from_item(item);
+          retrievers[retriever.uuid] = retriever;
+        }
+
+
+        this.bookedRuns = [];
+        for (const booking of bookings) {
+          this.bookedRuns.push({
+            id: booking.uuid,
+            title: this.dateToString(new Date(booking.start)) + " - Bokad hämtning",
+            collector: retrievers[booking.retriever_uuid].name,
+            status: booking.status
+          });
+        }
       },
       onBookNewTap() {
         this.$navigateTo(PlaceMarker);
