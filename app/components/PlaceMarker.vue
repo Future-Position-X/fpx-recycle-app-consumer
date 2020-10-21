@@ -170,7 +170,7 @@
             });
           }
 
-          await this.updateCollectors(centerLng, centerLat);
+          await this.updateCollectors(centerLat, centerLng);
         }
       }
     }

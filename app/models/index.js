@@ -9,7 +9,6 @@ class Retriever {
     retriever.name = item.properties.pantr_name;
     return retriever;
   }
-
 }
 
 const PropertyType = {
@@ -67,7 +66,19 @@ class Booking {
 }
 
 class Confirmation {
-  pantr_booking_uuid; // reference to the original "pantr-consumer" item
+  created_at;
+  booking_uuid;
+  retriever_uuid;
+  static from_item(item) {
+    let confirmation = new Confirmation();
+    confirmation.uuid = item.uuid;
+    confirmation.created_at = item.created_at;
+    confirmation.coordinates = item.geometry.coordinates;
+    confirmation.booking_uuid = item.properties.pantr_booking_uuid;
+    confirmation.retriever_uuid = item.properties.pantr_retriever_uuid;
+    return confirmation;
+  }
+
 }
 
 export {Retriever, Booking, Confirmation, PropertyType, BookingStatus}

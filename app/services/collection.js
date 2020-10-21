@@ -93,6 +93,25 @@ export default {
     return data;
   },
 
+  async fetchItemsByName(collectionName) {
+    const headers = {
+      Accept: `application/json`,
+    };
+
+    if (session.authenticated()) headers.Authorization = `Bearer ${session.token}`;
+
+    const response = await fetch(
+      `${config.SERVICE_URL}/collections/by_name/${collectionName}/items?limit=100000`,
+      {
+        headers,
+      }
+    );
+    //await this.validateResponse(response);
+
+    const data = await response.json();
+    return data;
+  },
+
   async createItems(collectionId, items) {
     const response = await fetch(`${config.SERVICE_URL}/collections/${collectionId}/items/bulk`, {
       method: 'POST',
@@ -145,17 +164,30 @@ export default {
       mode: 'cors',
       headers: {
         Authorization: `Bearer ${session.token}`,
-        'Content-Type': `application/geojson`,
-        Accept: 'application/geojson',
+        'Content-Type': `application/json`,
+        Accept: 'application/json',
       },
-      body: JSON.stringify({
-        type: 'FeatureCollection',
-        features: items,
-      }),
+      body: JSON.stringify(items),
     });
 
     await this.validateResponse(response);
   },
+
+  async updateItem(item_uuid, item) {
+    const response = await fetch(`${config.SERVICE_URL}/items/${item_uuid}`, {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+        'Content-Type': `application/json`,
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(item),
+    });
+
+    await this.validateResponse(response);
+  },
+
   async create(collectionName, isPublic) {
     const response = await fetch(`${config.SERVICE_URL}/collections`, {
       method: 'POST',
