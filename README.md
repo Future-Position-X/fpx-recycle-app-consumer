@@ -1,4 +1,4 @@
-# fpx-pant
+# pantr-consumer
 
 > A native application built with NativeScript-Vue
 
