@@ -140,8 +140,6 @@
           return new Promise(resolve => setTimeout(resolve, ms));
         },
         async onMapScroll(point) {
-          this.isFetchingCollectors = true;
-
           if (this.debouncedUpdateCollectors == null) {
             this.debouncedUpdateCollectors = debounce(this.updateCollectors, 500);
           }
