@@ -12,31 +12,55 @@
           <StackLayout row="1" marginTop="18">
             <Label text="Inställningar" fontWeight="bold" fontSize="23" class="titleColor"/>
             <Label text="Hur bor du?" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22"/>
-            <SegmentedBar selectedIndex="0" v-model="selectedPropertyType" background="#e3e3e4"
-                          selectedBackgroundColor="white" borderRadius="10" height="35" marginTop="10">
-              <SegmentedBarItem title="Villa"/>
-              <SegmentedBarItem title="Lägenhet"/>
-            </SegmentedBar>
+            <GridLayout rows="auto, auto" columns="*, *" marginTop="10">
+              <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="0"
+                     :src="selectedPropertyType === 0 ? '~/assets/images/ico_villa_selected@3x.png' : '~/assets/images/ico_villa_default@3x.png'"
+                     @onTap="() => this.selectedPropertyType = 0"/>
+              <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="1"
+                     :src="selectedPropertyType === 1 ? '~/assets/images/ico_appartment_selected@3x.png' : '~/assets/images/ico_appartment_default@3x.png'"
+                     @onTap="() => this.selectedPropertyType = 1"/>
+              <SegmentedBar row="1" column="0" columnSpan="2" v-model="selectedPropertyType" background="#e3e3e4"
+                            selectedBackgroundColor="white" borderRadius="10" height="35" marginTop="10">
+                <SegmentedBarItem title="Villa"/>
+                <SegmentedBarItem title="Lägenhet"/>
+              </SegmentedBar>
+            </GridLayout>
             <Label text="Inom vilken tidsram kan vi hämta panten?" fontWeight="bold" fontSize="18" class="titleColor"
                    marginTop="22"/>
-            <SegmentedBar selectedIndex="3" background="#e3e3e4" selectedBackgroundColor="white" borderRadius="10"
-                          height="35" marginTop="10">
-              <SegmentedBarItem title="12h"/>
-              <SegmentedBarItem title="24h"/>
-              <SegmentedBarItem title="48h"/>
-              <SegmentedBarItem title="72h"/>
-            </SegmentedBar>
+            <GridLayout rows="auto, auto" columns="*, *, *, *" marginTop="10">
+              <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="0"
+                     :src="selectedTimeFrame === 0 ? '~/assets/images/ico_12h_selected@3x.png' : '~/assets/images/ico_12h_default@3x.png'"
+                     @onTap="() => this.selectedTimeFrame = 0"/>
+              <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="1"
+                     :src="selectedTimeFrame === 1 ? '~/assets/images/ico_24h_selected@3x.png' : '~/assets/images/ico_24h_default@3x.png'"
+                     @onTap="() => this.selectedTimeFrame = 1"/>
+              <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="2"
+                     :src="selectedTimeFrame === 2 ? '~/assets/images/ico_48h_selected@3x.png' : '~/assets/images/ico_48h_default@3x.png'"
+                     @onTap="() => this.selectedTimeFrame = 2"/>
+              <Image stretch="none" horizontalAlignment="center" row="0" column="3"
+                     :src="selectedTimeFrame === 3 ? '~/assets/images/ico_72h_selected@3x.png' : '~/assets/images/ico_72h_default@3x.png'"
+                     @onTap="() => this.selectedTimeFrame = 3"/>
+              <SegmentedBar row="1" column="0" columnSpan="4" v-model="selectedTimeFrame" background="#e3e3e4"
+                            selectedBackgroundColor="white" borderRadius="10"
+                            height="35" marginTop="10">
+                <SegmentedBarItem title="12h"/>
+                <SegmentedBarItem title="24h"/>
+                <SegmentedBarItem title="48h"/>
+                <SegmentedBarItem title="72h"/>
+              </SegmentedBar>
+            </GridLayout>
             <Label row=0 text="Storlek på panten" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22"/>
             <GridLayout rows="auto, auto" columns="*, *, *" marginTop="10">
               <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="0"
-                     src="~/assets/images/icon_small_load@3x.png"/>
+                     :src="selectedPantSize === 0 ? '~/assets/images/ico_pant_small_selected@3x.png' : '~/assets/images/ico_pant_small_default@3x.png'"
+                     @onTap="() => this.selectedPantSize = 0"/>
               <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="1"
-                     marginRight="25" src="~/assets/images/icon_small_load@3x.png"/>
-              <Image stretch="none" horizontalAlignment="center" verticalAlignment="bottom" row="0" column="1"
-                     marginLeft="25" src="~/assets/images/icon_small_load@3x.png"/>
+                     :src="selectedPantSize === 1 ? '~/assets/images/ico_pant_mid_selected@3x.png' : '~/assets/images/ico_pant_mid_default@3x.png'"
+                     @onTap="() => this.selectedPantSize = 1"/>
               <Image stretch="none" horizontalAlignment="center" row="0" column="2"
-                     src="~/assets/images/icon_big_load@3x.png"/>
-              <SegmentedBar row="1" column="0" columnSpan="7" selectedIndex="0" v-model="selectedTimeFrame"
+                     :src="selectedPantSize === 2 ? '~/assets/images/ico_pant_big_selected@3x.png' : '~/assets/images/ico_pant_big_default@3x.png'"
+                     @onTap="() => this.selectedPantSize = 2"/>
+              <SegmentedBar row="1" column="0" columnSpan="3" v-model="selectedPantSize"
                             background="#e3e3e4" selectedBackgroundColor="white" borderRadius="10" height="35"
                             marginTop="10">
                 <SegmentedBarItem title="Liten"/>
@@ -47,12 +71,14 @@
             <Label text="Panthämtare" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22"/>
             <GridLayout paddingLeft="15" marginTop="10" background="white" height="50" borderRadius="30" borderWidth="1"
                         borderColor="#e7e7e8">
-              <DropDown style="font-size: 18px;" ref="pantRetrieversDropDown" :items="pantRetrievers" itemsPadding="20" itemsTextAlignment="center"
+              <DropDown style="font-size: 18px;" ref="pantRetrieversDropDown" :items="pantRetrievers" itemsPadding="20"
+                        itemsTextAlignment="center"
                         verticalAlignment="middle"/>
             </GridLayout>
             <Label v-if="selectedPropertyType == 1" text="Vilken trappa och våning?" fontWeight="bold" fontSize="18"
                    class="titleColor" marginTop="22"/>
-            <TextView v-if="selectedPropertyType == 1" marginTop="10" background="white" height="55" borderRadius="30" borderWidth="1"
+            <TextView v-if="selectedPropertyType == 1" marginTop="10" background="white" height="55" borderRadius="30"
+                      borderWidth="1"
                       borderColor="#e7e7e8"/>
             <Label text="Övrig information" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22"/>
             <TextView marginTop="10" background="white" height="55" borderRadius="30" borderWidth="1"
@@ -91,12 +117,14 @@ import collection from '../services/collection'
 import App from './App'
 import config from "../config";
 import {Booking, BookingStatus, PropertyType} from "../models";
+
 const ObservableArray = require("tns-core-modules/data/observable-array").ObservableArray;
 export default {
   data() {
     return {
       selectedPropertyType: 0,
-      selectedTimeFrame: 4,
+      selectedTimeFrame: 3,
+      selectedPantSize: 1,
       pantRetrievers: new ObservableArray(),
       floorInfo: null,
       otherInfo: null,
