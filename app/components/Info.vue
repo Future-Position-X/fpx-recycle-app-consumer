@@ -47,8 +47,7 @@
             <Label text="Panthämtare" fontWeight="bold" fontSize="18" class="titleColor" marginTop="22"/>
             <GridLayout paddingLeft="15" marginTop="10" background="white" height="50" borderRadius="30" borderWidth="1"
                         borderColor="#e7e7e8">
-              <DropDown style="font-size: 18px;" ref="pantRetrieversDropDown" :items="pantRetrievers"
-                        selectedIndex="selectedPantRetriever" itemsPadding="20" itemsTextAlignment="center"
+              <DropDown style="font-size: 18px;" ref="pantRetrieversDropDown" :items="pantRetrievers" itemsPadding="20" itemsTextAlignment="center"
                         verticalAlignment="middle"/>
             </GridLayout>
             <Label v-if="selectedPropertyType == 1" text="Vilken trappa och våning?" fontWeight="bold" fontSize="18"
@@ -92,14 +91,13 @@ import collection from '../services/collection'
 import App from './App'
 import config from "../config";
 import {Booking, BookingStatus, PropertyType} from "../models";
-
+const ObservableArray = require("tns-core-modules/data/observable-array").ObservableArray;
 export default {
   data() {
     return {
       selectedPropertyType: 0,
       selectedTimeFrame: 4,
-      pantRetrievers: [],
-      selectedPantRetriever: 0,
+      pantRetrievers: new ObservableArray(),
       floorInfo: null,
       otherInfo: null,
       showThankYou: false,
@@ -111,10 +109,10 @@ export default {
   methods: {
     onPageLoaded() {
       this.pantRetrievers.push("Alla tillgängliga");
-
       for (const availableRetriever of this.$store.state.availableRetrievers) {
         this.pantRetrievers.push(availableRetriever.name);
       }
+      this.$refs.pantRetrieversDropDown.nativeView.selectedIndex = 0;
     },
     onContinue() {
       this.$navigateTo(App);

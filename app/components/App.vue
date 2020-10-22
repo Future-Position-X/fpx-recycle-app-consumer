@@ -10,7 +10,7 @@
           
           <StackLayout v-if="!isFetchingData" row="1" marginTop="18">
             <StackLayout marginTop="3" padding="0" margin="0 10">
-              <Label text="Hämtningar i ditt område" fontWeight="bold" fontSize="21" class="titleColor" />
+              <!--<Label text="Hämtningar i ditt område" fontWeight="bold" fontSize="21" class="titleColor" />
               <GridLayout v-for="(item, index) in pantRuns" :key="item.id" columns="auto,*" borderBottomColor="#ddd" :borderBottomWidth="index == pantRuns.length - 1 ? 0 : 1" padding="10 0" margin="0 10">
                 <Image col="0" src="~/assets/images/icon_clock@3x.png" stretch="fill" verticalAlignment="center" marginRight="15" width="30" height="30"/>
                 <StackLayout col=1>
@@ -22,7 +22,7 @@
                     </FormattedString>
                   </Label>
                 </StackLayout>
-              </GridLayout>
+              </GridLayout>-->
               <Label text="Dina bokade hämtningar" fontWeight="bold" fontSize="21" class="titleColor" marginTop="20" />
               <GridLayout v-for="(item) in bookedRuns" :key="item.id" columns="*, auto" padding="10 15" margin="5 10" borderRadius="20" backgroundColor="white" androidElevation="12">
                 <StackLayout col=0>
@@ -135,9 +135,9 @@
         this.updateIntervalId = timer.setInterval(this.update, 30000);
       },
       async update() {
-        this.isFetchingData = true;
+        //this.isFetchingData = true;
         await this.updateBookings();
-        this.isFetchingData = false;
+        //this.isFetchingData = false;
       },
       async updateBookings()
       {
@@ -175,15 +175,16 @@
         }
 
 
-        this.bookedRuns = [];
+        let bookedRuns = [];
         for (const booking of bookings) {
-          this.bookedRuns.push({
+          bookedRuns.push({
             id: booking.uuid,
             title: this.dateToString(new Date(booking.start)) + " - Bokad hämtning",
             collector: retrievers[booking.retriever_uuid].name,
             status: booking.status
           });
         }
+        this.bookedRuns = bookedRuns;
       },
       onBookNewTap() {
         this.$navigateTo(PlaceMarker);
