@@ -6,8 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     selectedCoordinates: null,
-    availableRetrievers: null,
-    bookings: null
+    availableRetrievers: null
   },
   mutations: {
 

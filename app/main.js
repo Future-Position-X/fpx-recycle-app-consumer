@@ -13,6 +13,8 @@ if(TNS_ENV !== 'production') {
   Vue.use(VueDevtools)
 }
 import store from './store'
+import localStore from './services/local-store';
+import { ApplicationSettings } from 'tns-core-modules';
 
 // Prints Vue logs when --env.production is *NOT* set while building
 Vue.config.silent = (TNS_ENV === 'production')
@@ -45,15 +47,18 @@ BackgroundFetch.configure({
   // FETCH_RESULT_NEW_DATA: Received new data from your server
   // FETCH_RESULT_NO_DATA:  No new data received from your server
   // FETCH_RESULT_FAILED:  Failed to receive new data.
-  if (store.state.bookings.length == 0)
+  const localBookings = await localStore.getLocalBookings();
+
+  if (localBookings.length == 0)
     return;
 
   await booking.updateBookings();
   const latestBookings = await booking.getCurrentUserBookings();
 
   for (const latestBooking of latestBookings) {
-    for (const oldBooking of store.state.bookings) {
+    for (const oldBooking of localBookings) {
       if (oldBooking.uuid === latestBooking.uuid && oldBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
+        localStore.updateBooking(latestBooking);
         showNotification(latestBooking.properties.pantr_status);
       }
     }
@@ -66,16 +71,18 @@ BackgroundFetch.configure({
 BackgroundFetch.registerHeadlessTask(async function () {
   console.log("CALLED HEADLESS TASK")
   //console.log(LocalNotifications.hasPermission());
+  const localBookings = await localStore.getLocalBookings();
 
-  if (store.state.bookings.length == 0)
+  if (localBookings.length == 0)
     return;
 
   await booking.updateBookings();
   const latestBookings = await booking.getCurrentUserBookings();
 
   for (const latestBooking of latestBookings) {
-    for (const oldBooking of store.state.bookings) {
+    for (const oldBooking of localBookings) {
       if (oldBooking.uuid === latestBooking.uuid && oldBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
+        localStore.updateBooking(latestBooking);
         showNotification(latestBooking.properties.pantr_status);
       }
     }

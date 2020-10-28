@@ -68,6 +68,7 @@
   import collection from '../services/collection'
   import config from "../config";
   import {Booking, BookingStatus, Confirmation, Retriever} from "../models";
+  import localStore from '../services/local-store';
   const application = require('tns-core-modules/application');
   const timer = require('tns-core-modules/timer');
 

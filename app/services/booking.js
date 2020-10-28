@@ -2,6 +2,7 @@ import collection from './collection'
 import session from './session'
 import config from "../config";
 import {Booking, BookingStatus, Confirmation, Retriever} from "../models";
+import localStore from './local-store';
 
 export default {
     async getCurrentUserBookings() {
@@ -32,13 +33,13 @@ export default {
             return acc;
         }, {});
 
-
         const new_confirmed_bookings = bookings.filter((b) => b.status == BookingStatus.WAITING && confirmations_by_booking[b.uuid]);
+        console.log("new_confirmed_bookings.length: " + new_confirmed_bookings.length);
         if(new_confirmed_bookings.length > 0) {
             for(const new_confirmed_booking of new_confirmed_bookings) {
-            new_confirmed_booking.retriever_uuid = confirmations_by_booking[new_confirmed_booking.uuid][0].retriever_uuid;
-            new_confirmed_booking.status = BookingStatus.CONFIRMED;
-            await collection.updateItem(new_confirmed_booking.uuid, new_confirmed_booking.to_item())
+                new_confirmed_booking.retriever_uuid = confirmations_by_booking[new_confirmed_booking.uuid][0].retriever_uuid;
+                new_confirmed_booking.status = BookingStatus.CONFIRMED;
+                await collection.updateItem(new_confirmed_booking.uuid, new_confirmed_booking.to_item());
             }
             bookings = (await collection.fetchItems(recycleCollection.uuid)).map((i) => Booking.from_item(i));
         }

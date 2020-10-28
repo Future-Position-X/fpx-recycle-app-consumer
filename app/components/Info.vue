@@ -117,6 +117,7 @@ import collection from '../services/collection'
 import App from './App'
 import config from "../config";
 import {Booking, BookingStatus, PropertyType} from "../models";
+import localStore from '../services/local-store';
 
 const ObservableArray = require("tns-core-modules/data/observable-array").ObservableArray;
 export default {
@@ -187,8 +188,8 @@ export default {
 
       console.log("adding item to collection");
       console.log("item:" + JSON.stringify(booking.to_item()))
-      await collection.createItem(recycleCollection.uuid, booking.to_item());
-      this.$store.state.bookings = await collection.fetchItems(recycleCollection.uuid);
+      const createdBooking = await collection.createItem(recycleCollection.uuid, booking.to_item());
+      localStore.addNewBooking(createdBooking);
 
       this.showThankYou = true;
     },

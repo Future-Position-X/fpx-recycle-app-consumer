@@ -139,6 +139,7 @@ export default {
     });
 
     await this.validateResponse(response);
+    return await response.json();
   },
   async removeItems(items) {
     // eslint-disable-next-line no-restricted-syntax
