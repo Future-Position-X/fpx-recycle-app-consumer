@@ -43,5 +43,7 @@ export default {
             }
             bookings = (await collection.fetchItems(recycleCollection.uuid)).map((i) => Booking.from_item(i));
         }
+
+        return bookings;
     }
 };

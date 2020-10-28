@@ -68,7 +68,7 @@
   import collection from '../services/collection'
   import config from "../config";
   import {Booking, BookingStatus, Confirmation, Retriever} from "../models";
-  import localStore from '../services/local-store';
+  import bookingService from '../services/booking';
   const application = require('tns-core-modules/application');
   const timer = require('tns-core-modules/timer');
 
@@ -142,31 +142,7 @@
       },
       async updateBookings()
       {
-        let bookings = (await collection.fetchItems(this.recycleCollection.uuid)).map((i) => Booking.from_item(i));
-        const confirmations = (await collection.fetchItemsByName(config.CONFIRMATION_COLLECTION_NAME)).map((i) => Confirmation.from_item(i));
-
-        const confirmations_by_booking = confirmations.reduce((acc, c) => {
-          if(acc[c.booking_uuid]) {
-            acc[c.booking_uuid].push(c);
-          } else {
-            acc[c.booking_uuid] = [c];
-          }
-          acc[c.booking_uuid].sort((a, b) => (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime())
-          return acc;
-        }, {});
-
-
-        const new_confirmed_bookings = bookings.filter((b) => b.status == BookingStatus.WAITING && confirmations_by_booking[b.uuid]);
-        if(new_confirmed_bookings.length > 0) {
-          for(const new_confirmed_booking of new_confirmed_bookings) {
-            new_confirmed_booking.retriever_uuid = confirmations_by_booking[new_confirmed_booking.uuid][0].retriever_uuid;
-            new_confirmed_booking.status = BookingStatus.CONFIRMED;
-            await collection.updateItem(new_confirmed_booking.uuid, new_confirmed_booking.to_item())
-          }
-          bookings = (await collection.fetchItems(this.recycleCollection.uuid)).map((i) => Booking.from_item(i));
-        }
-
-
+        const bookings = await bookingService.updateBookings();
         let retrievers = {}
         // This should probably be done with one request where one could send multiple item uuids, like collection_uuids
         for(const booking of bookings) {
