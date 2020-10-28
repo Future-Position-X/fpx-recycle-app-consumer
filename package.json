@@ -16,10 +16,12 @@
   },
   "dependencies": {
     "@vue/devtools": "^5.3.3",
-    "nativescript": "^6.8.0",
     "debounce-async": "0.0.2",
+    "nativescript": "^6.8.0",
+    "nativescript-background-fetch": "^1.2.1",
     "nativescript-carousel": "^6.1.1",
     "nativescript-drop-down": "^5.0.6",
+    "nativescript-local-notifications": "^4.2.1",
     "nativescript-mapbox": "file:./nativescript-mapbox/publish/dist/package",
     "nativescript-socketio": "^3.3.1",
     "nativescript-toasty": "^3.0.0-alpha.2",

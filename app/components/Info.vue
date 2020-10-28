@@ -188,6 +188,7 @@ export default {
       console.log("adding item to collection");
       console.log("item:" + JSON.stringify(booking.to_item()))
       await collection.createItem(recycleCollection.uuid, booking.to_item());
+      this.$store.state.bookings = await collection.fetchItems(recycleCollection.uuid);
 
       this.showThankYou = true;
     },
