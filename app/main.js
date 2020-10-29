@@ -48,21 +48,17 @@ BackgroundFetch.configure({
   // FETCH_RESULT_NO_DATA:  No new data received from your server
   // FETCH_RESULT_FAILED:  Failed to receive new data.
   const localBookings = await localStore.getLocalBookings();
-
-  if (localBookings.length == 0)
-    return;
-
-  await booking.updateBookings();
-  const latestBookings = await booking.getCurrentUserBookings();
-
+  const latestBookings = await booking.updateBookings();
+  // TODO: figure out a good way to detect status change (updateBookings updates the local storage)
   for (const latestBooking of latestBookings) {
-    for (const oldBooking of localBookings) {
-      if (oldBooking.uuid === latestBooking.uuid && oldBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
-        localStore.updateBooking(latestBooking);
-        showNotification(latestBooking.properties.pantr_status);
+    for (const localBooking of localBookings) {
+      if (localBooking.uuid === latestBooking.uuid &&
+          localBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
+          showNotification(latestBooking.properties.pantr_status);
       }
     }
   }
+  
   BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
 }, (status) => {
   console.log('BackgroundFetch not supported by your OS', status);
@@ -72,18 +68,13 @@ BackgroundFetch.registerHeadlessTask(async function () {
   console.log("CALLED HEADLESS TASK")
   //console.log(LocalNotifications.hasPermission());
   const localBookings = await localStore.getLocalBookings();
-
-  if (localBookings.length == 0)
-    return;
-
-  await booking.updateBookings();
-  const latestBookings = await booking.getCurrentUserBookings();
+  const latestBookings = await booking.updateBookings();
 
   for (const latestBooking of latestBookings) {
-    for (const oldBooking of localBookings) {
-      if (oldBooking.uuid === latestBooking.uuid && oldBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
-        localStore.updateBooking(latestBooking);
-        showNotification(latestBooking.properties.pantr_status);
+    for (const localBooking of localBookings) {
+      if (localBooking.uuid === latestBooking.uuid &&
+          localBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
+          showNotification(latestBooking.properties.pantr_status);
       }
     }
   }

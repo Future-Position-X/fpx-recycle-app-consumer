@@ -43,6 +43,17 @@ export default {
             }
             bookings = (await collection.fetchItems(recycleCollection.uuid)).map((i) => Booking.from_item(i));
         }
+        
+        const localBookings = localStore.getLocalBookings();
+
+        for (const latestBooking of bookings.map(b => b.to_item())) {
+            for (const localBooking of localBookings) {
+                if (localBooking.uuid === latestBooking.uuid &&
+                    localBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
+                    localStore.updateBooking(latestBooking);
+                }
+            }
+        }
 
         return bookings;
     }

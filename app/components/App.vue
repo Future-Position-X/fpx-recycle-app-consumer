@@ -136,6 +136,7 @@
         this.updateIntervalId = timer.setInterval(this.update, 30000);
       },
       async update() {
+        console.log("update called");
         //this.isFetchingData = true;
         await this.updateBookings();
         //this.isFetchingData = false;
