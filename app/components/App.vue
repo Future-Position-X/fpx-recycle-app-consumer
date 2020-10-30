@@ -64,10 +64,7 @@
 
 <script>
   import PlaceMarker from './PlaceMarker'
-  import session from '../services/session'
-  import collection from '../services/collection'
-  import config from "../config";
-  import {Booking, BookingStatus, Confirmation, Retriever} from "../models";
+  import {BookingStatus} from "../models";
   import bookingService from '../services/booking';
   const application = require('tns-core-modules/application');
   const timer = require('tns-core-modules/timer');
@@ -147,10 +144,6 @@
         
         console.log("page loaded");
         this.isFetchingData = true;
-
-        if (session.token == null) {
-          await session.create("recycleconsumer@gia.fpx.se", "test");
-        }
         
         await this.updateBookings();
         this.isFetchingData = false;

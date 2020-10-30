@@ -36,6 +36,9 @@ export default {
         return retriever;
     },
     async updateBookings() {
+        if (!session.authenticated())
+            await session.create("recycleconsumer@gia.fpx.se", "test");
+        
         const collections = await collection.fetchCollections();
         const recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
         let bookings = (await collection.fetchItems(recycleCollection.uuid)).map((i) => Booking.from_item(i));

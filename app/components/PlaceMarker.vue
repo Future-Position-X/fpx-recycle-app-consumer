@@ -65,10 +65,7 @@
 <script>
   import Info from './Info'
   import * as utils from "utils/utils";
-  import collection from "../services/collection";
   import debounce from 'debounce-async';
-  import config from "../config";
-  import {Retriever} from "../models";
   import booking from '../services/booking';
   const appSettings = require("tns-core-modules/application-settings");
   export default {

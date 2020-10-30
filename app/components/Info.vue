@@ -112,12 +112,8 @@
 
 <script>
 import PlaceMarker from './PlaceMarker'
-import session from '../services/session'
-import collection from '../services/collection'
 import App from './App'
-import config from "../config";
 import {Booking, BookingStatus, PropertyType} from "../models";
-import localStore from '../services/local-store';
 import bookingService from '../services/booking';
 
 const ObservableArray = require("tns-core-modules/data/observable-array").ObservableArray;
