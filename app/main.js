@@ -25,8 +25,8 @@ Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView)
 
 new Vue({
   store,
-  //render: h => h('frame', [h(App)])
-  render: h => h('frame', [h(Intro)])
+  render: h => h('frame', [h(App)])
+  //render: h => h('frame', [h(Intro)])
 }).$start()
 
 BackgroundFetch.status((status) => {
@@ -47,14 +47,16 @@ BackgroundFetch.configure({
   // FETCH_RESULT_NEW_DATA: Received new data from your server
   // FETCH_RESULT_NO_DATA:  No new data received from your server
   // FETCH_RESULT_FAILED:  Failed to receive new data.
-  const localBookings = await localStore.getLocalBookings();
-  const latestBookings = await booking.updateBookings();
+  if (appSettings.getBoolean("allow_push", false)) {
+    const localBookings = await localStore.getLocalBookings();
+    const latestBookings = await booking.updateBookings();
 
-  for (const latestBooking of latestBookings) {
-    for (const localBooking of localBookings) {
-      if (localBooking.uuid === latestBooking.uuid &&
-          localBooking.properties.pantr_status !== latestBooking.status) {
-          showNotification(latestBooking.status);
+    for (const latestBooking of latestBookings) {
+      for (const localBooking of localBookings) {
+        if (localBooking.uuid === latestBooking.uuid &&
+            localBooking.properties.pantr_status !== latestBooking.status) {
+            showNotification(latestBooking.status);
+        }
       }
     }
   }
@@ -67,14 +69,16 @@ BackgroundFetch.configure({
 BackgroundFetch.registerHeadlessTask(async function () {
   console.log("CALLED HEADLESS TASK")
   //console.log(LocalNotifications.hasPermission());
-  const localBookings = await localStore.getLocalBookings();
-  const latestBookings = await booking.updateBookings();
+  if (appSettings.getBoolean("allow_push", false)) {
+    const localBookings = await localStore.getLocalBookings();
+    const latestBookings = await booking.updateBookings();
 
-  for (const latestBooking of latestBookings) {
-    for (const localBooking of localBookings) {
-      if (localBooking.uuid === latestBooking.uuid &&
-          localBooking.properties.pantr_status !== latestBooking.status) {
-          showNotification(latestBooking.status);
+    for (const latestBooking of latestBookings) {
+      for (const localBooking of localBookings) {
+        if (localBooking.uuid === latestBooking.uuid &&
+            localBooking.properties.pantr_status !== latestBooking.status) {
+            showNotification(latestBooking.status);
+        }
       }
     }
   }

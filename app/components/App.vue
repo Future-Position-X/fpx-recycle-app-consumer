@@ -41,7 +41,7 @@
                   </StackLayout>
                   <GridLayout columns="*, auto" paddingTop="20">
                     <Label column="0" marginBottom="4" text="Aktivera pushnotiser" class="bodyTextColor" fontSize="18"/>
-                    <Switch column="1" />
+                    <Switch column="1" v-model="allowPush" @checkedChange="onAllowPushChange" />
                   </GridLayout>
                 </StackLayout>
               </GridLayout>
@@ -71,6 +71,7 @@
   import bookingService from '../services/booking';
   const application = require('tns-core-modules/application');
   const timer = require('tns-core-modules/timer');
+  const appSettings = require("tns-core-modules/application-settings");
 
   const getStatusImages = function() {
     const statusImages = {};
@@ -104,7 +105,8 @@
           },
         ],
         recycleCollection: null,
-        updateIntervalId: 0
+        updateIntervalId: 0,
+        allowPush: false
       }
     },
     methods: {
@@ -123,6 +125,7 @@
         application.off(application.resumeEvent);
       },
       async onPageLoaded() {
+        this.allowPush = appSettings.getBoolean("allow_push", false);
         application.on(application.suspendEvent, (args) => {
           console.log("application suspend event");
 
@@ -154,6 +157,9 @@
         await this.updateBookings();
         this.isFetchingData = false;
         this.updateIntervalId = timer.setInterval(this.update, 30000);
+      },
+      onAllowPushChange() {
+        appSettings.setBoolean("allow_push", this.allowPush);
       },
       async update() {
         console.log("update called");
