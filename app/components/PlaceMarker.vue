@@ -69,6 +69,7 @@
   import debounce from 'debounce-async';
   import config from "../config";
   import {Retriever} from "../models";
+  import booking from '../services/booking';
   const appSettings = require("tns-core-modules/application-settings");
   export default {
     data() {
@@ -119,7 +120,7 @@
         },
         async updateCollectors(lat, lng) {
           this.isFetchingCollectors = true;
-          let retrievers = (await collection.fetchItemsByNameWithin(config.RETRIEVER_COLLECTION_NAME, {x: lng, y: lat}, 5000)).map((i) => Retriever.from_item(i));
+          let retrievers = await booking.findRetrieversInArea(lat, lng);
           this.availableRetrievers = retrievers;
           this.$store.state.availableRetrievers = this.availableRetrievers;
           console.log(retrievers);

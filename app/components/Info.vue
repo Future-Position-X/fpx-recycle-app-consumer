@@ -118,6 +118,7 @@ import App from './App'
 import config from "../config";
 import {Booking, BookingStatus, PropertyType} from "../models";
 import localStore from '../services/local-store';
+import bookingService from '../services/booking';
 
 const ObservableArray = require("tns-core-modules/data/observable-array").ObservableArray;
 export default {
@@ -169,27 +170,7 @@ export default {
       booking.other_info = this.otherInfo
       booking.status = BookingStatus.WAITING;
 
-      console.log("creating session");
-      await session.create("recycleconsumer@gia.fpx.se", "test");
-      console.log(session.token);
-
-      console.log("fetching collections by name");
-      const collections = await collection.fetchCollections();
-      console.log("collections: " + JSON.stringify(collections));
-
-      let recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
-      console.log("recycleCollection: " + JSON.stringify(recycleCollection));
-
-      if (recycleCollection == null) {
-        console.log("creating new collection");
-        recycleCollection = await collection.create(config.BOOKING_COLLECTION_NAME, false);
-        console.log("created collection: " + JSON.stringify(recycleCollection));
-      }
-
-      console.log("adding item to collection");
-      console.log("item:" + JSON.stringify(booking.to_item()))
-      const createdBooking = await collection.createItem(recycleCollection.uuid, booking.to_item());
-      localStore.addNewBooking(createdBooking);
+      await bookingService.addNewBooking(booking);
 
       this.showThankYou = true;
     },

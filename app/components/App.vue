@@ -152,8 +152,6 @@
           await session.create("recycleconsumer@gia.fpx.se", "test");
         }
         
-        const collections = await collection.fetchCollections();
-        this.recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
         await this.updateBookings();
         this.isFetchingData = false;
         this.updateIntervalId = timer.setInterval(this.update, 30000);
@@ -173,11 +171,9 @@
         let retrievers = {}
         // This should probably be done with one request where one could send multiple item uuids, like collection_uuids
         for(const booking of bookings) {
-          const item = await collection.fetchItem(booking.retriever_uuid);
-          const retriever = Retriever.from_item(item);
+          const retriever = await bookingService.getRetrieverFromBooking(booking);
           retrievers[retriever.uuid] = retriever;
         }
-
 
         let bookedRuns = [];
         for (const booking of bookings) {

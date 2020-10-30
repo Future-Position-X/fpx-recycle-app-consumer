@@ -5,17 +5,35 @@ import {Booking, BookingStatus, Confirmation, Retriever} from "../models";
 import localStore from './local-store';
 
 export default {
-    async getCurrentUserBookings() {
-        await session.create("recycleconsumer@gia.fpx.se", "test");
-        const collections = await collection.fetchCollections();
-        let recycleCollection = collections.find(c => c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
+    async findRetrieversInArea(lat, lng) {
+        const retrievers = 
+            await collection.fetchItemsByNameWithin(config.RETRIEVER_COLLECTION_NAME, {x: lng, y: lat}, 5000);
+        return retrievers.map((i) => Retriever.from_item(i));
+    },
+    async addNewBooking(booking) {
+        const bookingCollection = await this.getBookingCollection();
+        console.log("new booking:" + JSON.stringify(booking.to_item()))
+        const createdBooking = await collection.createItem(bookingCollection.uuid, booking.to_item());
+        localStore.addNewBooking(createdBooking);
+    },
+    async getBookingCollection() {
+        if (!session.authenticated())
+            await session.create("recycleconsumer@gia.fpx.se", "test");
 
-        if (recycleCollection == null) {
-            recycleCollection = await collection.create(config.BOOKING_COLLECTION_NAME, false);
-            return [];
-        } else {
-            return await collection.fetchItems(recycleCollection.uuid);
+        const collections = await collection.fetchCollections();
+        let bookingCollection = collections.find(c =>
+                c.name === config.BOOKING_COLLECTION_NAME && c.provider_uuid === session.user.provider_uuid);
+
+        if (bookingCollection == null) {
+            bookingCollection = await collection.create(config.BOOKING_COLLECTION_NAME, false);
         }
+
+        return bookingCollection;
+    },
+    async getRetrieverFromBooking(booking) {
+        const item = await collection.fetchItem(booking.retriever_uuid);
+        const retriever = Retriever.from_item(item);
+        return retriever;
     },
     async updateBookings() {
         const collections = await collection.fetchCollections();
