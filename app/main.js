@@ -49,12 +49,12 @@ BackgroundFetch.configure({
   // FETCH_RESULT_FAILED:  Failed to receive new data.
   const localBookings = await localStore.getLocalBookings();
   const latestBookings = await booking.updateBookings();
-  // TODO: figure out a good way to detect status change (updateBookings updates the local storage)
+
   for (const latestBooking of latestBookings) {
     for (const localBooking of localBookings) {
       if (localBooking.uuid === latestBooking.uuid &&
-          localBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
-          showNotification(latestBooking.properties.pantr_status);
+          localBooking.properties.pantr_status !== latestBooking.status) {
+          showNotification(latestBooking.status);
       }
     }
   }
@@ -73,14 +73,15 @@ BackgroundFetch.registerHeadlessTask(async function () {
   for (const latestBooking of latestBookings) {
     for (const localBooking of localBookings) {
       if (localBooking.uuid === latestBooking.uuid &&
-          localBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
-          showNotification(latestBooking.properties.pantr_status);
+          localBooking.properties.pantr_status !== latestBooking.status) {
+          showNotification(latestBooking.status);
       }
     }
   }
 });
 
 function showNotification(pantr_status) {
+  console.log("showing notification");
   let title;
 
   switch (pantr_status) {

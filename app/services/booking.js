@@ -46,11 +46,11 @@ export default {
         
         const localBookings = localStore.getLocalBookings();
 
-        for (const latestBooking of bookings.map(b => b.to_item())) {
+        for (const latestBooking of bookings) {
             for (const localBooking of localBookings) {
                 if (localBooking.uuid === latestBooking.uuid &&
-                    localBooking.properties.pantr_status !== latestBooking.properties.pantr_status) {
-                    localStore.updateBooking(latestBooking);
+                    localBooking.properties.pantr_status !== latestBooking.status) {
+                    localStore.updateBooking(latestBooking.to_item());
                 }
             }
         }
