@@ -13,7 +13,7 @@ export default {
     async addNewBooking(booking) {
         const bookingCollection = await this.getBookingCollection();
         console.log("new booking:" + JSON.stringify(booking.to_item()))
-        const createdBooking = await collection.createItem(bookingCollection.uuid, booking.to_item());
+        const createdBooking = Booking.from_item(await collection.createItem(bookingCollection.uuid, booking.to_item()));
         localStore.addNewBooking(createdBooking);
     },
     async getBookingCollection() {
@@ -67,8 +67,8 @@ export default {
         for (const latestBooking of bookings) {
             for (const localBooking of localBookings) {
                 if (localBooking.uuid === latestBooking.uuid &&
-                    localBooking.properties.pantr_status !== latestBooking.status) {
-                    localStore.updateBooking(latestBooking.to_item());
+                    localBooking.status !== latestBooking.status) {
+                    localStore.updateBooking(latestBooking);
                 }
             }
         }

@@ -54,7 +54,7 @@ BackgroundFetch.configure({
     for (const latestBooking of latestBookings) {
       for (const localBooking of localBookings) {
         if (localBooking.uuid === latestBooking.uuid &&
-            localBooking.properties.pantr_status !== latestBooking.status) {
+            localBooking.status !== latestBooking.status) {
             showNotification(latestBooking.status);
         }
       }
@@ -76,7 +76,7 @@ BackgroundFetch.registerHeadlessTask(async function () {
     for (const latestBooking of latestBookings) {
       for (const localBooking of localBookings) {
         if (localBooking.uuid === latestBooking.uuid &&
-            localBooking.properties.pantr_status !== latestBooking.status) {
+            localBooking.status !== latestBooking.status) {
             showNotification(latestBooking.status);
         }
       }
