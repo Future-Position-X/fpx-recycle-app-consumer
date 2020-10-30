@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="onPageLoaded" actionBarHidden="true" background="#f2f2f2">
+  <Page @loaded="onPageLoaded" @navigatingFrom="onPageNavigatingFrom" actionBarHidden="true" background="#f2f2f2">
     <GridLayout>
       <ActivityIndicator v-if="isFetchingData" verticalAlignment="center" busy="true"/>
       <ScrollView>
@@ -112,7 +112,26 @@
           const str = `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
           return str;
       },
+      onPageNavigatingFrom(){
+        console.log("navigating from");
+        
+        if (this.updateIntervalId !== 0) {
+          timer.clearInterval(this.updateIntervalId);
+        }
+
+        application.off(application.suspendEvent);
+        application.off(application.resumeEvent);
+      },
       async onPageLoaded() {
+        application.on(application.suspendEvent, (args) => {
+          console.log("application suspend event");
+
+          if (this.updateIntervalId !== 0) {
+            timer.clearInterval(this.updateIntervalId);
+            this.updateIntervalId = 0;
+          }
+        });
+
         application.on(application.resumeEvent, (args) => {
             if (args.android) {
                 // For Android applications, args.android is an android activity class.
@@ -122,6 +141,7 @@
                 console.log("WOOT UIApplication: " + args.ios);
             }
         });
+        
         console.log("page loaded");
         this.isFetchingData = true;
 
