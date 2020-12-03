@@ -147,6 +147,7 @@
         
         await this.updateBookings();
         this.isFetchingData = false;
+        //this.updateIntervalId = timer.setInterval(this.update, 5000);
         this.updateIntervalId = timer.setInterval(this.update, 30000);
       },
       onAllowPushChange() {

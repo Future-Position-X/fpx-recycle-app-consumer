@@ -25,8 +25,8 @@ Vue.registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView)
 
 new Vue({
   store,
-  render: h => h('frame', [h(App)])
-  //render: h => h('frame', [h(Intro)])
+  //render: h => h('frame', [h(App)])
+  render: h => h('frame', [h(Intro)])
 }).$start()
 
 BackgroundFetch.status((status) => {
@@ -102,5 +102,6 @@ function showNotification(pantr_status) {
 
   notification.show(title);
 }
-
+//const appSettings = require("tns-core-modules/application-settings");
+//appSettings.remove("bookings");
 //
